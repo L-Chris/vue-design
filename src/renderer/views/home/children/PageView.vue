@@ -1,0 +1,40 @@
+<template>
+  <section>
+    <ElTree ref="tree" :data="pages" node-key="id" @node-click="handleSelect" @node-contextmenu="handleDelete" highlight-current/>
+  </section>
+</template>
+
+<script>
+import {mapState} from 'vuex'
+import {DEL_PAGE, SET_SELECTED_PAGE} from '@/store/mutation-types'
+export default {
+  computed: {
+    ...mapState(['pages', 'selectedPage'])
+  },
+  watch: {
+    '$route.query.id' (val) {
+      this.$nextTick(() => this.setCurrentKey(val))
+    }
+  },
+  methods: {
+    handleSelect (e, {data}) {
+      this.$store.commit(SET_SELECTED_PAGE, data)
+      this.replaceTo(`?id=${data.id}`)
+    },
+    setCurrentKey (id = this.selectedPage.id) {
+      this.$refs['tree'].getCurrentKey() !== id &&
+      this.$refs['tree'].setCurrentKey(id)
+    },
+    handleDelete (e, _) {
+      this.selectedPage.id !== _.id && this.$store.commit(DEL_PAGE, _)
+    }
+  },
+  mounted () {
+    this.setCurrentKey()
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>
