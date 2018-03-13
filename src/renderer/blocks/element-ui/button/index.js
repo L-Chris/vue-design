@@ -1,26 +1,30 @@
 import { props, setting } from './type'
+export default { props, setting }
 
-export default {
+export const VdElButton = {
+  name: 'vd-el-button',
   props,
-  setting
+  render (h) {
+    return h(
+      'el-button',
+      {
+        props: {
+          size: this.size,
+          type: this.type,
+          plain: this.plain,
+          round: this.round,
+          loading: this.loading,
+          disabled: this.disabled,
+          icon: this.icon,
+          autofocus: this.autofocus,
+          'native-type': this['native-type']
+        }
+      },
+      this.slots.map(_ => h(_.tag, {
+        slot: _.slot,
+        attrs: { id: _.id },
+        props: _.props
+      }))
+    )
+  }
 }
-
-// export default {
-//   name: 'vb-el-button',
-//   props,
-//   data () {
-//     return {
-//       $setting: Object.freeze($setting)
-//     }
-//   },
-//   render (h) {
-//     return (
-//       <el-button
-//         size={this.size}
-//         type={this.type}
-//         loading={this.loading}
-//       >{this.text}
-//       </el-button>
-//     )
-//   }
-// }

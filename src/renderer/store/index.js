@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {ipcRenderer} from 'electron'
-import {spliceIf, guid} from '@/utils'
+import {spliceIf, guid, recursiveFindBy, recursiveSpliceBy} from '@/utils'
 import blocks from '@/blocks'
 import pageModule from './modules/page'
 import * as types from './mutation-types'
@@ -42,14 +42,14 @@ let store = new Vuex.Store({
     },
     [types.DEL_COMPONENT] (state, {id}) {
       let {id: pageId} = state.selectedPage
-      spliceIf(state[pageId].components, _ => _.id === id)
+      recursiveSpliceBy(state[pageId].components, _ => _.id === id, 'props.slots')
     },
     [types.UPDATE_COMPONENT] (state, options) {
       let pageState = state[state.selectedPage.id]
       const {id} = options
-      const index = pageState.components.findIndex(_ => _.id === id)
-      if (index < 0) return
-      pageState.components[index] = Object.assign(pageState.components[index], options)
+      let component = recursiveFindBy(pageState.components, _ => _.id === id, 'props.slots')
+      if (!component) return
+      Object.assign(component, options)
     },
     [types.SET_SELECTED_PAGE] (state, page) {
       state.selectedPage = page
@@ -88,8 +88,8 @@ let store = new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production'
 })
 
+// 加载项目
 ipcRenderer.on('load:project', (event, project) => {
-  console.log(project)
 })
 
 export default store

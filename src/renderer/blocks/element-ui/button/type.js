@@ -1,6 +1,6 @@
 import {toProps} from '@/utils'
 
-export const setting = {
+let config = {
   key: 'el-button',
   name: 'el-button',
   config: [
@@ -104,6 +104,14 @@ export const setting = {
           ]
         }
       ]
+    },
+    {
+      name: 'Slot',
+      children: [
+        {
+          name: 'default'
+        }
+      ]
     }
   ],
   events: [
@@ -114,4 +122,5 @@ export const setting = {
   ]
 }
 
-export let props = toProps(setting)
+export let props = toProps(config)
+export const setting = Object.freeze(config)

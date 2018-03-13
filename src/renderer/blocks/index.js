@@ -1,9 +1,13 @@
-// import Native from './native'
-import ElementUI from './element-ui'
-import Vuetify from './vuetify'
+import ElementUI, {ElComponents} from './element-ui'
+// import Vuetify from './vuetify'
 
 export default {
-  // Native,
-  ElementUI,
-  Vuetify
+  ElementUI
+  // Vuetify
+}
+
+export function installBlocks (Vue) {
+  ElComponents.forEach(_ => {
+    Vue.component(_.name, _)
+  })
 }

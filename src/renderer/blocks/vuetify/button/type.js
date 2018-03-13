@@ -247,6 +247,14 @@ export const setting = {
           default: undefined
         }
       ]
+    },
+    {
+      name: 'Slot',
+      children: [
+        {
+          name: 'default'
+        }
+      ]
     }
   ],
   events: [

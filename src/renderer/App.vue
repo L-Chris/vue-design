@@ -8,7 +8,7 @@
 
 <script>
   export default {
-    name: 'vue-design-electron'
+    name: 'app'
   }
 </script>
 

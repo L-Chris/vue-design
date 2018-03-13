@@ -21,6 +21,7 @@ export default {
       this.$store.commit(SET_SELECTED_PAGE, data)
       this.replaceTo(`?id=${data.id}`)
     },
+    // 若当前node的key与已选页的id不等，则触发选择
     setCurrentKey (id = this.selectedPage.id) {
       this.$refs['tree'].getCurrentKey() !== id &&
       this.$refs['tree'].setCurrentKey(id)
