@@ -53,15 +53,15 @@ function createMenu (window) {
           }
         }
       ]
-    },
-    {
-      label: 'edit',
-      submenu: []
-    },
-    {
-      label: 'setting',
-      submenu: []
     }
+    // {
+    //   label: 'edit',
+    //   submenu: []
+    // },
+    // {
+    //   label: 'setting',
+    //   submenu: []
+    // }
   ]
 
   const menu = Menu.buildFromTemplate(template)

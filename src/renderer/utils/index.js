@@ -46,10 +46,17 @@ export const toProps = ({config}) => {
       default: defaultValue
     }
     return pre
-  }, {
+  },
+  {
     slots: {
       type: Array,
       default: []
+    }
+  },
+  {
+    domProps: {
+      type: Object,
+      default: {}
     }
   })
 }
@@ -65,30 +72,26 @@ export function convertToProject (pages) {
 }
 // 递归查询
 export function recursiveFindBy (collection, condition, childrenKey = 'children') {
-  let children
+  let children, result
   for (let _ of collection) {
     if (condition(_)) return _
     children = parsePath(childrenKey)(_)
     if (children && children.length) {
-      return recursiveFindBy(children, condition, childrenKey)
-    } else {
-      continue
+      result = recursiveFindBy(children, condition, childrenKey)
+      if (result) return result
     }
   }
 }
 // 递归删除
 export function recursiveSpliceBy (collection, condition, childrenKey = 'children') {
-  let children
+  let children, result
   for (let i = 0, len = collection.length; i < len; i++) {
     let _ = collection[i]
-    if (condition(_)) {
-      return collection.splice(i, 1)
-    }
+    if (condition(_)) return collection.splice(i, 1)
     children = parsePath(childrenKey)(_)
     if (children && children.length) {
-      return recursiveSpliceBy(children, condition, childrenKey)
-    } else {
-      continue
+      result = recursiveSpliceBy(children, condition, childrenKey)
+      if (result) return result
     }
   }
 }
@@ -99,4 +102,22 @@ export function createElement (target, id = guid()) {
   element.id = id
   target.appendChild(element)
   return element
+}
+
+// 拼接组件属性
+export function parseAttrs ({props, setting: { config }}) {
+  function parseAttr (key, val, type) {
+    return `${type !== 'String' ? ':' : ''}${key}="${val}"`
+  }
+  let propsModel = config[1].children
+  return propsModel.reduce((pre, {key, type, default: defaultValue}) =>
+    defaultValue === props[key] ? pre : `${pre} ${parseAttr(key, props[key], type)}`
+    , '')
+}
+
+// 组件转换为模板字符串
+export function parseTemplate (components) {
+  return components.reduce((pre, {props: {slots, ...props}, setting, label}) => {
+    return `${pre}<${label} ${parseAttrs({props, setting})}>${slots.length ? parseTemplate(slots) : ''}</${label}>`
+  }, '')
 }

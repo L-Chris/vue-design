@@ -1,6 +1,6 @@
 <template>
   <section id="wrapper" class="workspace view" @mousedown="handleMouseDown" @drop="handleDrop" @dragover.prevent="handleDragOver">
-    <!-- 右键菜单 -->
+    <!-- context menu -->
     <div ref="menu" class="menu" :style="menu.style"/>
     <v-menu v-model="menu.visible" :activator="$refs['menu']" max-width="120">
       <v-list>
@@ -12,7 +12,7 @@
         </v-list-tile>
       </v-list>
     </v-menu>
-    <!-- slot菜单 -->
+    <!-- slots menu -->
     <div ref="slotMenu" class="menu" :style="slotMenu.style"/>
     <v-menu v-model="slotMenu.visible" :activator="$refs['slotMenu']" max-width="120">
       <v-list>
@@ -25,12 +25,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import throttle from 'lodash.throttle'
 import {mapState, mapGetters, mapActions} from 'vuex'
+import componentMixins from '@/mixins/component'
 import {SET_SELECTED_COMPONENT, SET_SELECTED_BLOCK, UPDATE_COMPONENT} from '@/store/mutation-types'
 import {createElement, guid, recursiveFindBy} from '@/utils'
 export default {
+  mixins: [componentMixins],
   data () {
     return {
       menu: {
@@ -73,22 +74,6 @@ export default {
         }
       })
     },
-    createComponent ({id}) {
-      let that = this
-      const instance = new Vue({
-        el: document.getElementById(id),
-        render (h) {
-          let component = recursiveFindBy(that.components, _ => _.id === id, 'props.slots')
-          // if (!component) return this.$destroy()
-          if (!component) return
-          let {tag, props} = component
-          return h(tag, { props })
-        }
-      })
-      instance.$mount()
-      instance.$el.id = id
-      return instance
-    },
     // 根据所选block创建组件信息
     createComponentInfo (id, parent) {
       let {tag, label, props: $props, setting} = this.selectedBlock
@@ -96,7 +81,7 @@ export default {
         pre[key] = val.default
         return pre
       }, {})
-      return {id, parent, tag, label, props, setting, slots: []}
+      return {id, parent, tag, label, props, setting}
     },
     // drop触发组件挂载
     handleDrop ({target}) {
@@ -113,7 +98,6 @@ export default {
       component.slot = name
       let selectedComponent = JSON.parse(JSON.stringify(this.selectedComponent))
       selectedComponent.props.slots.push(component)
-      selectedComponent.slots.push(component)
       this.$store.commit(UPDATE_COMPONENT, selectedComponent)
       this.resetMenu(this.slotMenu)
       this.$store.commit(SET_SELECTED_BLOCK, null)
@@ -126,10 +110,6 @@ export default {
       let slots = component.setting.config[2].children
       this.$nextTick(() => this.showMenu(this.slotMenu, {x, y, slots}))
     }, 100),
-    // drag移出菜单时将其隐藏
-    handleDragleaveFromSlot () {
-      this.resetMenu(this.slotMenu)
-    },
     // 全局捕获鼠标点击，选择组件
     handleMouseDown ({button, path, x, y}) {
       // left or right click

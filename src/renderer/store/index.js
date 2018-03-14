@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {ipcRenderer} from 'electron'
 import {spliceIf, guid, recursiveFindBy, recursiveSpliceBy} from '@/utils'
 import blocks from '@/blocks'
 import pageModule from './modules/page'
@@ -10,6 +9,7 @@ Vue.use(Vuex)
 
 let store = new Vuex.Store({
   state: {
+    project: '',
     pages: [],
     blocks,
     selectedPage: null,
@@ -27,6 +27,9 @@ let store = new Vuex.Store({
     }
   },
   mutations: {
+    [types.SET_PROJECT] (state, project) {
+      state.project = project
+    },
     [types.ADD_PAGE] (state, page) {
       state.pages.push(page)
     },
@@ -69,7 +72,7 @@ let store = new Vuex.Store({
       }
       commit(types.SET_SELECTED_BLOCK, block)
     },
-    addPage ({state, commit}, {id = `page${guid()}`, label = `页面${state.pages.length + 1}`, children = []} = {}) {
+    addPage ({state, commit}, {id = `page${guid()}`, label = `page${state.pages.length + 1}`, children = []} = {}) {
       this.registerModule(id, pageModule)
       let page = {id, label, children}
       commit(types.ADD_PAGE, page)
@@ -86,10 +89,6 @@ let store = new Vuex.Store({
     }
   }
   // strict: process.env.NODE_ENV !== 'production'
-})
-
-// 加载项目
-ipcRenderer.on('load:project', (event, project) => {
 })
 
 export default store

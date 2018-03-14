@@ -1,6 +1,6 @@
 <template>
   <section>
-    <ElTree ref="tree" :data="pages" node-key="id" @node-click="handleSelect" @node-contextmenu="handleDelete" highlight-current/>
+    <ElTree ref="tree" :data="pages" node-key="id" @node-click="handleSelect" @node-contextmenu="handleDelete" highlight-current empty-text="No Data"/>
   </section>
 </template>
 

@@ -27,6 +27,33 @@
         </v-flex>
       </v-layout>
     </template>
+    <template v-if="component.setting&&component.domProps">
+      <span class="subheading">DomProps</span>
+      <v-layout v-for="_ in component.setting.config[3].children" :key="_.key" row style="height:48px;">
+        <v-flex xs6>
+          <v-subheader>{{_.label}}</v-subheader>
+        </v-flex>
+        <v-flex class="inspector-field" xs6>
+          <v-select v-if="_.inputType==='select'" v-model="component.props[_.key]" :items="_.data" item-text="label" item-value="value" @change="handleChange" clearable/>
+          <v-switch v-else-if="_.inputType==='switch'" v-model="component.props[_.key]" hide-details @change="handleChange"/>
+          <v-text-field
+            v-else-if="_.type==='Number'"
+            v-model.number="component.props[_.key]"
+            :required="_.required"
+            @change="handleChange"
+            single-line
+          />
+          <v-text-field
+            v-else
+            v-model="component.props[_.key]"
+            :placeholder="_.default"
+            :required="_.required"
+            @change="handleChange"
+            single-line
+          />
+        </v-flex>
+      </v-layout>
+    </template>
   </v-container>
 </template>
 
