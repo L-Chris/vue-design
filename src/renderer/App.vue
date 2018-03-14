@@ -1,0 +1,21 @@
+<template>
+  <div id="app">
+    <v-app>
+      <router-view></router-view>
+    </v-app>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'app'
+  }
+</script>
+
+<style lang="scss">
+@import url(//at.alicdn.com/t/font_590901_2ukp7iy6jyqilik9.css);
+@import './styles/index';
+::-webkit-scrollbar{
+  display:none;
+}
+</style>
