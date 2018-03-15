@@ -4,7 +4,7 @@
 <p align="right" style="position:absolute;top:16px;right:28px;">
   English | <a href="https://github.com/L-Chris/vue-design/blob/master/README.zh-CN.md">中文</a>
 </p>
-<p align="center">用<strong>Vue和Electron</strong>开发最好的页面<strong>可视化</strong>构建程序</p>
+<p align="center">用<strong>Vue</strong>和<strong>Electron</strong>开发最好的页面<strong>可视化</strong>构建程序</p>
 <p align="right"><em>Your star is the greatest encouragement to me.</em></p>
 
 ## ✨ Features:
@@ -13,6 +13,11 @@
 - 通过可拖拽的组件设计页面
 - 保存为.vue文件
 - 保存/导入一个项目
+
+<p align="center">
+  <img width="250px" src="https://raw.githubusercontent.com/L-Chris/vue-design/dev/docs/images/layout.png">
+  <img width="250px" src="https://raw.githubusercontent.com/L-Chris/vue-design/dev/docs/images/code.png">
+</p>
 
 ## 🔧 开发步骤
 

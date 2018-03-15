@@ -1,9 +1,9 @@
 {
   "name": "vue-design",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "L-Chris <563303226@qq.com>",
-  "description": "An electron-vue project",
-  "license": null,
+  "description": "Be the best website visualization builder with Vue and Electron",
+  "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
