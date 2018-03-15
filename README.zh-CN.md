@@ -4,17 +4,17 @@
 <p align="right" style="position:absolute;top:16px;right:28px;">
   English | <a href="https://github.com/L-Chris/vue-design/blob/master/README.zh-CN.md">中文</a>
 </p>
-<p align="center">Be the best website <strong>visualization</strong> builder with <strong>Vue</strong> and <strong>Electron</strong>.</p>
+<p align="center">用<strong>Vue和Electron</strong>开发最好的页面<strong>可视化</strong>构建程序</p>
 <p align="right"><em>Your star is the greatest encouragement to me.</em></p>
 
 ## ✨ Features:
 
-- desktop application build with electron
-- design page with dragable components
-- save as .vue files
-- import a saved project
+- 使用electron构建的桌面端应用
+- 通过可拖拽的组件设计页面
+- 保存为.vue文件
+- 保存/导入一个项目
 
-## 🔧 Build Setup
+## 🔧 开发步骤
 
 ``` bash
 git clone https://github.com/L-Chris/vue-design.git
@@ -33,10 +33,10 @@ npm run build
 npm run lint
 ```
 
-## 🛣 Pending
-- layouts and blocks
-- watch .vue files and sync to the project
-- widgets and blocks market
+## 🛣 进行中
+- 内置布局和区块
+- 检测.vue文件改动并自动同步到项目中
+- 物料市场
 
 ## 🥂 License
 
