@@ -3,10 +3,7 @@
     <!-- context menu -->
     <div ref="menu" class="menu" :style="menu.style"/>
     <v-menu v-model="menu.visible" :activator="$refs['menu']" max-width="120">
-      <v-list>
-        <v-list-tile disabled>
-          <v-list-tile-title>{{selectedComponent ? selectedComponent.label : ''}}</v-list-tile-title>
-        </v-list-tile>
+      <v-list subheader dense>
         <v-list-tile v-ripple="true" @click="handleDeleteComponent">
           <v-list-tile-title>删除</v-list-tile-title>
         </v-list-tile>
@@ -15,22 +12,27 @@
     <!-- slots menu -->
     <div ref="slotMenu" class="menu" :style="slotMenu.style"/>
     <v-menu v-model="slotMenu.visible" :activator="$refs['slotMenu']" max-width="120">
-      <v-list>
+      <v-list subheader dense>
         <v-list-tile v-ripple="true" v-for="_ in slotMenu.slots" :key="_.name" @drop.stop="handleDropInSlot(_.name)" @dragover.prevent="()=>{}">
           <v-list-tile-title>{{_.name}}</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-menu>
+    <SelectedMask/>
   </section>
 </template>
 
 <script>
+import SelectedMask from './SelectedMask'
 import throttle from 'lodash.throttle'
 import {mapState, mapGetters, mapActions} from 'vuex'
 import componentMixins from '@/mixins/component'
 import {SET_SELECTED_COMPONENT, SET_SELECTED_BLOCK, UPDATE_COMPONENT} from '@/store/mutation-types'
 import {createElement, guid, recursiveFindBy} from '@/utils'
 export default {
+  components: {
+    SelectedMask
+  },
   mixins: [componentMixins],
   data () {
     return {
@@ -46,7 +48,7 @@ export default {
   },
   computed: {
     ...mapState(['selectedBlock']),
-    ...mapGetters(['components', 'selectedComponent'])
+    ...mapGetters(['selectedComponent'])
   },
   watch: {
     selectedComponent (val) {
@@ -69,8 +71,8 @@ export default {
         visible: true,
         slots,
         style: {
-          left: `${x - 48}px`,
-          top: `${y - 64}px`
+          left: `${x - 24}px`,
+          top: `${y - 24}px`
         }
       })
     },
@@ -99,8 +101,8 @@ export default {
       let selectedComponent = JSON.parse(JSON.stringify(this.selectedComponent))
       selectedComponent.props.slots.push(component)
       this.$store.commit(UPDATE_COMPONENT, selectedComponent)
-      this.resetMenu(this.slotMenu)
       this.$store.commit(SET_SELECTED_BLOCK, null)
+      this.resetMenu(this.slotMenu)
     },
     // dragover触发slot提示
     handleDragOver: throttle(function ({path, x, y}) {

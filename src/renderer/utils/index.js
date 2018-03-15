@@ -70,6 +70,21 @@ export const getOwnProperty = obj => {
 
 export function convertToProject (pages) {
 }
+
+// 递归map
+export function recursiveMap (collection, childrenKey) {
+  let children
+  for (let _ of collection) {
+    children = parsePath(childrenKey)(_)
+    if (children && children.length) {
+      _.children = recursiveMap(children, childrenKey)
+    } else {
+      _.children = []
+    }
+  }
+  return collection
+}
+
 // 递归查询
 export function recursiveFindBy (collection, condition, childrenKey = 'children') {
   let children, result

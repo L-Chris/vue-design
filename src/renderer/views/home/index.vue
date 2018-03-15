@@ -5,33 +5,47 @@
         <v-expansion-panel-content :value="true">
           <div slot="header">
             <v-flex d-flex justify-space-between align-center>
-              <span>Pages</span>
-              <v-icon style="flex: 0!important;" @click.stop="handleAddPage">add</v-icon>
+              <span class="body-2">Sitemap</span>
+              <i class="iconfont icon-add" style="flex: 0!important;" @click.stop="handleAddPage"/>
             </v-flex>
           </div>
-          <PageView/>
+          <SitemapPane/>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content :value="false">
+          <div slot="header">
+            <v-flex d-flex justify-space-between align-center>
+              <span class="body-2">Blocks</span>
+              <i class="iconfont icon-download" style="flex: 0!important;" @click.stop="downloadBlocks"/>
+            </v-flex>
+          </div>
+          <BlockPane/>
         </v-expansion-panel-content>
         <v-expansion-panel-content :value="true">
-          <div slot="header">Blocks</div>
-          <BlockView/>
+          <div slot="header">
+            <v-flex d-flex justify-space-between align-center>
+              <span class="body-2">Widgets</span>
+              <i class="iconfont icon-download" style="flex: 0!important;" @click.stop="downloadWidgets"/>
+            </v-flex>
+          </div>
+          <WidgetPane/>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-navigation-drawer>
     <v-navigation-drawer app fixed right clipped permanent width="360">
       <v-expansion-panel expand>
         <v-expansion-panel-content :value="true">
-          <div slot="header">Inspector</div>
-          <InspectorView/>
+          <div slot="header" class="body-2">Inspector</div>
+          <InspectorPane/>
         </v-expansion-panel-content>
         <v-expansion-panel-content :value="true">
-          <div slot="header">Outline</div>
-          <OutlineView/>
+          <div slot="header" class="body-2">Outline</div>
+          <OutlinePane/>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-navigation-drawer>
     <v-content class="home-main">
-      <v-container  fill-height>
-        <v-toolbar dense flat>
+      <v-container fill-height>
+        <v-toolbar class="home-main-bar" dense flat>
           <v-toolbar-side-icon></v-toolbar-side-icon>
           <v-toolbar-title>{{activeView.label}}</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -54,18 +68,22 @@
         </keep-alive>
       </v-container>
     </v-content>
+    <v-footer class="home-foot pr-0" app fixed>
+      <div>GreedZone&copy; 2017</div>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
 import opn from 'opn'
 import {ipcRenderer} from 'electron'
-import WorkspaceView from './children/WorkspaceView'
-import CodeView from './children/CodeView'
-import PageView from './children/PageView'
-import BlockView from './children/BlockView'
-import InspectorView from './children/InspectorView'
-import OutlineView from './children/OutlineView'
+import WireframePane from './children/WireframePane'
+import CodePane from './children/CodePane'
+import SitemapPane from './children/SitemapPane'
+import BlockPane from './children/BlockPane'
+import WidgetPane from './children/WidgetPane'
+import InspectorPane from './children/InspectorPane'
+import OutlinePane from './children/OutlinePane'
 import componentMixins from '@/mixins/component'
 import {Project} from '@/services'
 import {mapState, mapActions} from 'vuex'
@@ -73,18 +91,19 @@ import {SET_PROJECT, SET_PAGE, DEL_PAGE} from '@/store/mutation-types'
 export default {
   mixins: [componentMixins],
   components: {
-    WorkspaceView,
-    CodeView,
-    PageView,
-    BlockView,
-    InspectorView,
-    OutlineView
+    WireframePane,
+    CodePane,
+    SitemapPane,
+    BlockPane,
+    WidgetPane,
+    InspectorPane,
+    OutlinePane
   },
   data () {
     return {
       views: [
-        { id: 0, label: 'Layout', value: 'WorkspaceView', icon: 'layout', tip: 'view layout' },
-        { id: 1, label: 'Code', value: 'CodeView', icon: 'code', tip: 'view code' }
+        { id: 0, label: 'Layout', value: 'WireframePane', icon: 'layout', tip: 'view layout' },
+        { id: 1, label: 'Code', value: 'CodePane', icon: 'code', tip: 'view code' }
       ],
       activeIndex: 0
     }
@@ -107,6 +126,9 @@ export default {
       const {id} = await this.addPage()
       this.replaceTo(`?id=${id}`)
     },
+    // Todo download blocks and widgets
+    downloadBlocks () {},
+    downloadWidgets () {},
     handleSave () {
       let pages = this.pages.map(_ => ({
         ..._,
@@ -119,7 +141,9 @@ export default {
     },
     init () {
       // 加载项目
-      ipcRenderer.on('load:project', (event, [path]) => {
+      ipcRenderer.on('load:project', (event, paths) => {
+        if (!paths || !paths.length) return
+        let [path] = paths
         let {pages, modules} = Project.load(path)
         // reset
         for (let page of this.pages) {
@@ -145,12 +169,25 @@ export default {
 
 <style lang="scss" scoped>
 .home {
+  .navigation-drawer {
+    padding-bottom: 0;
+  }
   &-main {
+    &-bar {
+      .iconfont {
+        font-size: 20px;
+      }
+    }
     .container {
       padding: 0;
       align-items: flex-start;
       flex-direction: column;
     }
+  }
+  &-foot {
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #bbbbbb;
   }
 }
 </style>
