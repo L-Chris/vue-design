@@ -15,8 +15,8 @@
 - 保存/导入一个项目
 
 <p align="center">
-  <img width="250px" src="https://raw.githubusercontent.com/L-Chris/vue-design/dev/docs/images/layout.png">
-  <img width="250px" src="https://raw.githubusercontent.com/L-Chris/vue-design/dev/docs/images/code.png">
+  <img width="400px" src="https://raw.githubusercontent.com/L-Chris/vue-design/develop/docs/images/layout.png">
+  <img width="400px" src="https://raw.githubusercontent.com/L-Chris/vue-design/develop/docs/images/code.png">
 </p>
 
 ## 🔧 开发步骤
