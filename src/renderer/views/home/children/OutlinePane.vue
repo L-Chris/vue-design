@@ -1,16 +1,19 @@
 <template>
   <section>
-    <ElTree ref="tree" :data="components" node-key="id" @node-click="handleSelect" @node-contextmenu="handleDelete" empty-text="No Data" highlight-current/>
+    <ElTree ref="tree" :data="componentTree" node-key="id" children="children" @node-click="handleSelect" @node-contextmenu="handleDelete" empty-text="No Data" highlight-current/>
   </section>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import {spliceIf} from '@/utils'
+import {spliceIf, recursiveMap} from '@/utils'
 import {SET_SELECTED_COMPONENT} from '@/store/mutation-types'
 export default {
   computed: {
-    ...mapGetters(['components', 'selectedComponent'])
+    ...mapGetters(['components', 'selectedComponent']),
+    componentTree () {
+      return recursiveMap(JSON.parse(JSON.stringify(this.components)), 'props.slots')
+    }
   },
   watch: {
     'selectedComponent' (component) {
@@ -19,8 +22,8 @@ export default {
   },
   methods: {
     ...mapActions(['deleteComponent']),
-    handleSelect (e, _) {
-      this.$store.commit(SET_SELECTED_COMPONENT, _.data)
+    handleSelect (e, {data}) {
+      this.$store.commit(SET_SELECTED_COMPONENT, data)
     },
     // 若当前node的key与已选页的id不等，则触发选择
     setCurrentKey (id = this.selectedComponent.id) {

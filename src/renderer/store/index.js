@@ -72,7 +72,7 @@ let store = new Vuex.Store({
       }
       commit(types.SET_SELECTED_BLOCK, block)
     },
-    addPage ({state, commit}, {id = `page${guid()}`, label = `page${state.pages.length + 1}`, children = []} = {}) {
+    addPage ({state, commit}, {id = `page${guid()}`, label = id, children = []} = {}) {
       this.registerModule(id, pageModule)
       let page = {id, label, children}
       commit(types.ADD_PAGE, page)

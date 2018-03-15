@@ -5,9 +5,6 @@ export default {
     },
     replaceTo (path) {
       this.$router.replace(path)
-    },
-    checkPath (path) {
-      return this.$route.path === path
     }
   }
 }
