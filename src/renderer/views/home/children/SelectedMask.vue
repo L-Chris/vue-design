@@ -1,5 +1,7 @@
 <template>
-  <div class="selector" v-show="visible" :style="style"/>
+  <v-scale-transition>
+    <div class="selector" v-show="visible" :style="style"/>
+  </v-scale-transition>
 </template>
 
 <script>
@@ -36,7 +38,6 @@ export default {
     },
     hideSelector () {
       this.visible = false
-      this.style = {}
     }
   }
 }
@@ -46,7 +47,7 @@ export default {
   .selector {
     pointer-events: none;
     position: fixed;
-    border: 1px dashed #000;
+    border: 1px dashed #64B5F6;
     z-index: 1;
   }
 </style>

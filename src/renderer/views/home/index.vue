@@ -11,6 +11,15 @@
           </div>
           <SitemapPane/>
         </v-expansion-panel-content>
+        <v-expansion-panel-content :value="true">
+          <div slot="header">
+            <v-flex d-flex justify-space-between align-center>
+              <span class="body-2">Layouts</span>
+              <i class="iconfont icon-download" style="flex: 0!important;" @click.stop="downloadLayouts"/>
+            </v-flex>
+          </div>
+          <LayoutPane/>
+        </v-expansion-panel-content>
         <v-expansion-panel-content :value="false">
           <div slot="header">
             <v-flex d-flex justify-space-between align-center>
@@ -43,6 +52,16 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-navigation-drawer>
+    <v-toolbar class="home-head" height="96px" app fixed clipped-left clipped-right flat>
+      <TuTitleBar class="head-bar"/>
+      <div class="home-head-menubar head-bar d-flex justify-space-between">
+        <div></div>
+        <div style="text-align:right;">
+          <TuIconButton icon="setting" text="setting"/>
+          <!-- <TuIconButton icon="user_fill" text="login"/> -->
+        </div>
+      </div>
+    </v-toolbar>
     <v-content class="home-main">
       <v-container fill-height>
         <v-toolbar class="home-main-bar" dense flat>
@@ -68,18 +87,18 @@
         </keep-alive>
       </v-container>
     </v-content>
-    <v-footer class="home-foot pr-0" app fixed>
-      <div>GreedZone&copy; 2017</div>
-    </v-footer>
   </v-app>
 </template>
 
 <script>
 import opn from 'opn'
 import {ipcRenderer} from 'electron'
+import TuTitleBar from '@/components/TuTitleBar'
+import TuIconButton from '@/components/TuIconButton'
 import WireframePane from './children/WireframePane'
 import CodePane from './children/CodePane'
 import SitemapPane from './children/SitemapPane'
+import LayoutPane from './children/LayoutPane'
 import BlockPane from './children/BlockPane'
 import WidgetPane from './children/WidgetPane'
 import InspectorPane from './children/InspectorPane'
@@ -91,9 +110,12 @@ import {SET_PROJECT, SET_PAGE, DEL_PAGE} from '@/store/mutation-types'
 export default {
   mixins: [componentMixins],
   components: {
+    TuTitleBar,
+    TuIconButton,
     WireframePane,
     CodePane,
     SitemapPane,
+    LayoutPane,
     BlockPane,
     WidgetPane,
     InspectorPane,
@@ -127,6 +149,7 @@ export default {
       this.replaceTo(`?id=${id}`)
     },
     // Todo download blocks and widgets
+    downloadLayouts () {},
     downloadBlocks () {},
     downloadWidgets () {},
     handleSave () {
@@ -167,10 +190,36 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.home {
+  &-head {
+    .toolbar__content {
+      flex-direction: column;
+    }
+    &-menubar {
+      padding: 0 24px;
+      .iconfont {
+        font-size: 20px!important;
+      }
+    }
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 .home {
   .navigation-drawer {
     padding-bottom: 0;
+  }
+  .head-bar {
+    width: 100%;
+    margin: 0!important;
+    .btn {
+      margin: 2px;
+    }
+  }
+  &-head {
+    border-bottom: 1px solid #bbbbbb;
   }
   &-main {
     &-bar {
@@ -183,11 +232,6 @@ export default {
       align-items: flex-start;
       flex-direction: column;
     }
-  }
-  &-foot {
-    align-items: center;
-    justify-content: center;
-    border-top: 1px solid #bbbbbb;
   }
 }
 </style>
