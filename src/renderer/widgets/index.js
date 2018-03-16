@@ -8,7 +8,7 @@ export default {
   Native
 }
 
-export function installBlocks (Vue) {
+export function installWidgets (Vue) {
   [].concat(ElementUI, Vuetify, Native).forEach(_ => {
     Vue.component(_.setting.tag, _.component)
   })

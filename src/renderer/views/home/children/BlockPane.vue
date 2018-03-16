@@ -8,7 +8,7 @@
     <div v-for="(f, fname) in filteredBlocks" :key="fname">
       <v-list subheader dense>
         <v-list-tile v-for="_ in f" :key="_.id" @click="()=>{}" @dragstart.native="handleDrag(_)" draggable>
-          <v-list-tile-content>{{_.label}}</v-list-tile-content>
+          <v-list-tile-content>{{_.setting.label}}</v-list-tile-content>
         </v-list-tile>
       </v-list>
     </div>
@@ -27,7 +27,7 @@ export default {
     ...mapState(['blocks']),
     filteredBlocks () {
       return Object.entries(this.blocks).reduce((pre, [key, val]) => {
-        pre[key] = val.filter(_ => _.label.toLowerCase().includes(this.name))
+        pre[key] = val.filter(_ => _.setting.label.toLowerCase().includes(this.name))
         return pre
       }, {})
     }

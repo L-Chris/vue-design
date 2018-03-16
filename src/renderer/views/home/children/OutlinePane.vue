@@ -1,6 +1,6 @@
 <template>
   <section>
-    <ElTree ref="tree" :data="componentTree" node-key="id" children="children" @node-click="handleSelect" @node-contextmenu="handleDelete" empty-text="No Data" highlight-current/>
+    <ElTree ref="tree" :data="componentTree" node-key="id" :props="defaultProps" @node-click="handleSelect" @node-contextmenu="handleDelete" empty-text="No Data" highlight-current/>
   </section>
 </template>
 
@@ -9,6 +9,14 @@ import {mapGetters, mapActions} from 'vuex'
 import {spliceIf, recursiveMap} from '@/utils'
 import {SET_SELECTED_COMPONENT} from '@/store/mutation-types'
 export default {
+  data () {
+    return {
+      defaultProps: {
+        label: _ => _.setting.label,
+        children: 'children'
+      }
+    }
+  },
   computed: {
     ...mapGetters(['components', 'selectedComponent']),
     componentTree () {

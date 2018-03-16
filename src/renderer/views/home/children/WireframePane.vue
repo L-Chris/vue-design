@@ -27,7 +27,7 @@ import SelectedMask from './SelectedMask'
 import throttle from 'lodash.throttle'
 import {mapState, mapGetters, mapActions} from 'vuex'
 import componentMixins from '@/mixins/component'
-import {SET_SELECTED_COMPONENT, SET_SELECTED_BLOCK, UPDATE_COMPONENT} from '@/store/mutation-types'
+import {SET_SELECTED_COMPONENT, SET_SELECTED_WIDGET, UPDATE_COMPONENT} from '@/store/mutation-types'
 import {createElement, guid, recursiveFindBy} from '@/utils'
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['selectedBlock']),
+    ...mapState(['selectedWidget']),
     ...mapGetters(['selectedComponent'])
   },
   watch: {
@@ -76,32 +76,29 @@ export default {
         }
       })
     },
-    // 根据所选block创建组件信息
+    // 根据所选widget创建组件信息
     createComponentInfo (id, parent) {
-      let {tag, label, props: $props, setting} = this.selectedBlock
-      let props = Object.entries($props).reduce((pre, [key, val]) => {
-        pre[key] = val.default
-        return pre
-      }, {})
-      return {id, parent, tag, label, props, setting}
+      let {createProps, setting} = this.selectedWidget
+      let props = createProps()
+      return {id, parent, props, setting}
     },
     // drop触发组件挂载
     handleDrop ({target}) {
-      if (!this.selectedBlock) return
+      if (!this.selectedWidget) return
       let {id} = createElement(target)
       let component = this.createComponentInfo(id, target.id)
       this.addComponent(component)
       this.createComponent({id})
-      this.$store.commit(SET_SELECTED_BLOCK, null)
+      this.$store.commit(SET_SELECTED_WIDGET, null)
     },
     handleDropInSlot (name) {
-      if (!this.selectedBlock || !this.selectedComponent) return
+      if (!this.selectedWidget || !this.selectedComponent) return
       let component = this.createComponentInfo(guid().toString(), this.selectedComponent.id)
       component.slot = name
       let selectedComponent = JSON.parse(JSON.stringify(this.selectedComponent))
       selectedComponent.props.slots.push(component)
       this.$store.commit(UPDATE_COMPONENT, selectedComponent)
-      this.$store.commit(SET_SELECTED_BLOCK, null)
+      this.$store.commit(SET_SELECTED_WIDGET, null)
       this.resetMenu(this.slotMenu)
     },
     // dragover触发slot提示
@@ -109,9 +106,9 @@ export default {
       this.resetMenu(this.slotMenu)
       let component = this.selectComponent(path)
       if (!component) return
-      let slots = component.setting.config[2].children
+      let slots = component.setting.config.Slots
       this.$nextTick(() => this.showMenu(this.slotMenu, {x, y, slots}))
-    }, 100),
+    }, 150),
     // 全局捕获鼠标点击，选择组件
     handleMouseDown ({button, path, x, y}) {
       // left or right click

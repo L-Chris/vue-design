@@ -1,7 +1,7 @@
 const setting = Object.freeze({
-  label: 'div',
-  tag: 'VdDiv',
-  originTag: 'div',
+  label: 'section',
+  tag: 'VdSection',
+  originTag: 'section',
   category: 'layout',
   config: {
     Props: [

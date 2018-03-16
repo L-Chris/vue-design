@@ -1,22 +1,8 @@
-import { props, setting } from './type'
-export default { props, setting }
+import {createProps, wrapComponent} from '@/utils/component'
+import setting from './type'
 
-export const VdElContainer = {
-  name: 'vd-el-container',
-  props,
-  render (h) {
-    return h(
-      'el-container',
-      {
-        props: {
-          direction: this.direction
-        }
-      },
-      this.slots.map(_ => h(_.tag, {
-        slot: _.slot,
-        attrs: { id: _.id },
-        props: _.props
-      }))
-    )
-  }
+export default {
+  createProps: createProps(setting.config.Props),
+  setting,
+  component: wrapComponent(setting)
 }

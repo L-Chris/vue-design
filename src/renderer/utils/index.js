@@ -21,46 +21,6 @@ export const parsePath = path => {
 let id = 1000
 export const guid = () => id++
 
-export const getTypeConstructor = type => {
-  switch (type) {
-    case 'Number':
-      return Number
-    case 'Boolean':
-      return Boolean
-    case 'Array':
-      return Array
-    case 'Object':
-      return Object
-    default:
-      return String
-  }
-}
-
-export const toProps = ({config}) => {
-  if (!config || !Array.isArray(config)) return {}
-  let style = config.find(_ => _.name === 'Style')
-  if (!style) return {}
-  return style.children.reduce((pre, {key, type, default: defaultValue}) => {
-    pre[key] = {
-      type: getTypeConstructor(type),
-      default: defaultValue
-    }
-    return pre
-  },
-  {
-    slots: {
-      type: Array,
-      default: []
-    }
-  },
-  {
-    domProps: {
-      type: Object,
-      default: {}
-    }
-  })
-}
-
 export const getOwnProperty = obj => {
   return Object.keys(obj).reduce((pre, _) => {
     pre[_] = obj[_]
@@ -117,22 +77,4 @@ export function createElement (target, id = guid()) {
   element.id = id
   target.appendChild(element)
   return element
-}
-
-// 拼接组件属性
-export function parseAttrs ({props, setting: { config }}) {
-  function parseAttr (key, val, type) {
-    return `${type !== 'String' ? ':' : ''}${key}="${val}"`
-  }
-  let propsModel = config[1].children
-  return propsModel.reduce((pre, {key, type, default: defaultValue}) =>
-    defaultValue === props[key] ? pre : `${pre} ${parseAttr(key, props[key], type)}`
-    , '')
-}
-
-// 组件转换为模板字符串
-export function parseTemplate (components) {
-  return components.reduce((pre, {props: {slots, ...props}, setting, label}) => {
-    return `${pre}<${label} ${parseAttrs({props, setting})}>${slots.length ? parseTemplate(slots) : ''}</${label}>`
-  }, '')
 }
