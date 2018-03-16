@@ -1,6 +1,6 @@
 import fs from 'fs'
 import pretty from 'pretty'
-import {parseTemplate} from '@/utils'
+import {parseTemplate} from '@/utils/component'
 
 class Project {
   // constructor () {}
@@ -20,7 +20,8 @@ class Project {
             return {
               components,
               selectedComponent: null,
-              selectedBlock: null
+              selectedBlock: null,
+              selectedWidget: null
             }
           }
         }

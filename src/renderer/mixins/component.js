@@ -15,7 +15,7 @@ export default {
           let component = recursiveFindBy(that.components, _ => _.id === id, 'props.slots')
           // if (!component) return this.$destroy()
           if (!component) return
-          let {tag, props} = component
+          let {setting: { tag }, props} = component
           return h(tag, { props, attrs: { id } })
         }
       })

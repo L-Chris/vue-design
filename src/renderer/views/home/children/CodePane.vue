@@ -8,7 +8,7 @@
 import {codemirror} from 'vue-codemirror'
 import pretty from 'pretty'
 import {mapGetters} from 'vuex'
-import {parseTemplate} from '@/utils'
+import {parseTemplate} from '@/utils/component'
 import 'codemirror/lib/codemirror.css'
 export default {
   components: {

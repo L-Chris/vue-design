@@ -1,6 +1,6 @@
 {
   "name": "vue-design",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "L-Chris <563303226@qq.com>",
   "description": "Be the best website visualization builder with Vue and Electron",
   "license": "MIT",
@@ -55,6 +55,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "element-ui": "^2.2.1",
+    "htmlparser2": "^3.9.2",
     "lodash.throttle": "^4.1.1",
     "opn": "^5.2.0",
     "pretty": "^2.0.0",

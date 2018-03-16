@@ -1,6 +1,8 @@
-import { props, setting } from './type'
+import {createProps, wrapComponent} from '@/utils/component'
+import setting from './type'
 
 export default {
-  props,
-  setting
+  createProps: createProps(setting.config.Props),
+  setting,
+  component: wrapComponent(setting)
 }

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {spliceIf, guid, recursiveFindBy, recursiveSpliceBy} from '@/utils'
 import blocks from '@/blocks'
+import widgets from '@/widgets'
 import pageModule from './modules/page'
 import * as types from './mutation-types'
 
@@ -12,8 +13,10 @@ let store = new Vuex.Store({
     project: '',
     pages: [],
     blocks,
+    widgets,
     selectedPage: null,
-    selectedBlock: null
+    selectedBlock: null,
+    selectedWidget: null
   },
   getters: {
     pageId (state) {
@@ -63,6 +66,9 @@ let store = new Vuex.Store({
     },
     [types.SET_SELECTED_BLOCK] (state, block) {
       state.selectedBlock = block
+    },
+    [types.SET_SELECTED_WIDGET] (state, widget) {
+      state.selectedWidget = widget
     }
   },
   actions: {
@@ -71,6 +77,12 @@ let store = new Vuex.Store({
         commit(types.SET_SELECTED_COMPONENT, null)
       }
       commit(types.SET_SELECTED_BLOCK, block)
+    },
+    selectWidget ({commit, state}, widget) {
+      if (state.selectedComponent) {
+        commit(types.SET_SELECTED_COMPONENT, null)
+      }
+      commit(types.SET_SELECTED_WIDGET, widget)
     },
     addPage ({state, commit}, {id = `page${guid()}`, label = id, children = []} = {}) {
       this.registerModule(id, pageModule)

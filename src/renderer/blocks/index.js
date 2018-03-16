@@ -1,6 +1,6 @@
-import ElementUI, {ElComponents} from './element-ui'
-import Vuetify, {VComponents} from './vuetify'
-import Native, {NtComponents} from './native'
+import ElementUI from './element-ui'
+import Vuetify from './vuetify'
+import Native from './native'
 
 export default {
   ElementUI,
@@ -9,7 +9,7 @@ export default {
 }
 
 export function installBlocks (Vue) {
-  [...ElComponents, ...VComponents, ...NtComponents].forEach(_ => {
-    Vue.component(_.name, _)
+  [].concat(ElementUI, Vuetify, Native).forEach(_ => {
+    Vue.component(_.setting.tag, _.component)
   })
 }
