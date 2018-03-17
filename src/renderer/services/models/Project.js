@@ -30,19 +30,23 @@ class Project {
     }
   }
 
-  save (path, data, cb) {
+  save ({name, path}, data, cb) {
     /* eslint-disable */
     const scripts = `<script>export default {}<\/script>`
     const styles = `<style>.view {}</style>`
+    const fullPath = `${path}/${name}`
+    if (!fs.existsSync(fullPath)) {
+      fs.mkdirSync(fullPath)
+    }
     for (let page of data) {
       let {id, components} = page
       let code = `<template><section>${parseTemplate(components)}</section></template>${scripts}${styles}`
       code = pretty(code)
-      fs.writeFile(`project/${id}.vue`, code, err => {
+      fs.writeFile(`${fullPath}/${id}.vue`, code, err => {
         if (err) console.log(err)
       })
     }
-    fs.writeFile(path, JSON.stringify(data), cb)
+    fs.writeFile(`${fullPath}/${name}.vd-project`, JSON.stringify(data), cb)
   }
 }
 

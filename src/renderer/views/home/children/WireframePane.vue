@@ -1,8 +1,7 @@
 <template>
   <section id="wrapper" class="workspace view" @mousedown="handleMouseDown" @drop="handleDrop" @dragover.prevent="handleDragOver">
     <!-- context menu -->
-    <div ref="menu" class="menu" :style="menu.style"/>
-    <v-menu v-model="menu.visible" :activator="$refs['menu']" max-width="120">
+    <v-menu v-model="menu.visible" absolute offset-y :position-x="menu.x" :position-y="menu.y" max-width="120">
       <v-list subheader dense>
         <v-list-tile v-ripple="true" @click="handleDeleteComponent">
           <v-list-tile-title>删除</v-list-tile-title>
@@ -10,8 +9,7 @@
       </v-list>
     </v-menu>
     <!-- slots menu -->
-    <div ref="slotMenu" class="menu" :style="slotMenu.style"/>
-    <v-menu v-model="slotMenu.visible" :activator="$refs['slotMenu']" max-width="120">
+    <v-menu v-model="slotMenu.visible" absolute offset-y :position-x="slotMenu.x" :position-y="slotMenu.y" max-width="120">
       <v-list subheader dense>
         <v-list-tile v-ripple="true" v-for="_ in slotMenu.slots" :key="_.name" @drop.stop="handleDropInSlot(_.name)" @dragover.prevent="()=>{}">
           <v-list-tile-title>{{_.name}}</v-list-tile-title>
@@ -38,11 +36,13 @@ export default {
     return {
       menu: {
         visible: false,
-        style: {}
+        x: 0,
+        y: 0
       },
       slotMenu: {
         visible: false,
-        style: {}
+        x: 0,
+        y: 0
       }
     }
   },
@@ -60,20 +60,16 @@ export default {
     resetMenu (menu) {
       Object.assign(menu, {
         visible: false,
-        style: {
-          left: '0px',
-          top: '0px'
-        }
+        x: 0,
+        y: 0
       })
     },
     showMenu (menu, {x, y, slots}) {
       Object.assign(menu, {
         visible: true,
         slots,
-        style: {
-          left: `${x - 24}px`,
-          top: `${y - 24}px`
-        }
+        x,
+        y
       })
     },
     // 根据所选widget创建组件信息

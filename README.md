@@ -39,9 +39,11 @@ npm run lint
 ```
 
 ## 🛣 Pending
-- layouts and blocks
-- watch .vue files and sync to the project
-- widgets and blocks market
+- edit component css (2018/03-2018/04)
+- more build-in layouts、blocks and widgets (2018/03-2018/04)
+- watch .vue files and sync to the project (2018/04)
+- widgets and blocks market  (2018/04)
+- customize plugins and plugins market (2018/05)
 
 ## 🥂 License
 

@@ -21,13 +21,13 @@
 import {ipcRenderer} from 'electron'
 import TuStatusIcon from '@/components/TuStatusIcon'
 export default {
+  components: {
+    TuStatusIcon
+  },
   data () {
     return {
       iconStatus: 0
     }
-  },
-  components: {
-    TuStatusIcon
   },
   methods: {
     init () {

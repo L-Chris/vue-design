@@ -10,7 +10,10 @@ Vue.use(Vuex)
 
 let store = new Vuex.Store({
   state: {
-    project: '',
+    project: {
+      name: '',
+      path: ''
+    },
     pages: [],
     blocks,
     widgets,
@@ -72,6 +75,20 @@ let store = new Vuex.Store({
     }
   },
   actions: {
+    resetProject ({commit, state}) {
+      for (let page of state.pages) {
+        this.unregisterModule(page.id)
+      }
+      commit(types.SET_PAGE, [])
+      commit(types.SET_PROJECT, { name: '', path: '' })
+    },
+    loadProject ({commit, state}, {name, path, pages, modules}) {
+      commit(types.SET_PROJECT, { name, path })
+      commit(types.SET_PAGE, pages)
+      Object.entries(modules).forEach(([key, val]) => {
+        this.registerModule(key, val)
+      })
+    },
     selectBlock ({commit, state}, block) {
       if (state.selectedComponent) {
         commit(types.SET_SELECTED_COMPONENT, null)
