@@ -13,8 +13,8 @@
 </script>
 
 <style lang="scss">
-@import url(//at.alicdn.com/t/font_590901_wgsedgw0vke53ik9.css);
 @import './styles/index';
+@import './styles/iconfont';
 ::-webkit-scrollbar{
   display:none;
 } 
