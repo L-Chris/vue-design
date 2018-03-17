@@ -55,9 +55,13 @@
     <v-toolbar class="home-head" height="96px" app fixed clipped-left clipped-right flat>
       <TuTitleBar class="head-bar"/>
       <div class="home-head-menubar head-bar d-flex justify-space-between">
-        <div></div>
+        <div>
+          <TuIconButton icon="create" text="create" @click.native="handleCreate"/>
+          <TuIconButton icon="import" text="import" @click.native="handleImport"/>
+          <TuIconButton icon="save" text="save" @click.native="handleSave"/>
+        </div>
         <div style="text-align:right;">
-          <TuIconButton icon="setting" text="setting"/>
+          <TuIconButton icon="setting" text="setting" @click.native="showSettingDialog"/>
           <!-- <TuIconButton icon="user_fill" text="login"/> -->
         </div>
       </div>
@@ -87,6 +91,7 @@
         </keep-alive>
       </v-container>
     </v-content>
+    <SettingDialog :visible.sync="settingDialogVisible" @cancel="handleDialogCancel" @confirm="handleDialogConfirm"/>
   </v-app>
 </template>
 
@@ -103,14 +108,15 @@ import BlockPane from './children/BlockPane'
 import WidgetPane from './children/WidgetPane'
 import InspectorPane from './children/InspectorPane'
 import OutlinePane from './children/OutlinePane'
+import SettingDialog from './children/SettingDialog'
 import componentMixins from '@/mixins/component'
 import {Project} from '@/services'
 import {mapState, mapActions} from 'vuex'
-import {SET_PROJECT, SET_PAGE, DEL_PAGE} from '@/store/mutation-types'
 export default {
   mixins: [componentMixins],
   components: {
     TuTitleBar,
+    SettingDialog,
     TuIconButton,
     WireframePane,
     CodePane,
@@ -127,23 +133,33 @@ export default {
         { id: 0, label: 'Layout', value: 'WireframePane', icon: 'layout', tip: 'view layout' },
         { id: 1, label: 'Code', value: 'CodePane', icon: 'code', tip: 'view code' }
       ],
-      activeIndex: 0
+      activeIndex: 0,
+      settingDialogVisible: false,
+      status: 0
     }
   },
   computed: {
-    ...mapState(['pages']),
+    ...mapState(['pages', 'project']),
     activeView () {
       return this.views[this.activeIndex]
     }
   },
   methods: {
-    ...mapActions(['addPage']),
+    ...mapActions(['addPage', 'loadProject', 'resetProject']),
+    handleImport () {
+      ipcRenderer.send('load:project')
+    },
+    showSettingDialog () {
+      this.settingDialogVisible = true
+    },
+    // workspace pane
     openBrowser () {
       opn('https://github.com/L-Chris/vue-design-electron')
     },
     activateView (index) {
       this.activeIndex = index
     },
+    // sitemap pane
     async handleAddPage () {
       const {id} = await this.addPage()
       this.replaceTo(`?id=${id}`)
@@ -152,31 +168,50 @@ export default {
     downloadLayouts () {},
     downloadBlocks () {},
     downloadWidgets () {},
-    handleSave () {
+    saveProject () {
       let pages = this.pages.map(_ => ({
         ..._,
         components: this.$store.state[_.id].components
       }))
-      Project.save('project.json', pages, err => err
-        ? this.$message.error('保存失败！')
-        : this.$message.success('保存成功！')
-      )
+      Project.save(this.project, pages, err => {
+        if (err) {
+          this.$message.error('保存失败！')
+        } else {
+          this.$message.success('保存成功！')
+        }
+      })
+    },
+    handleCreate () {
+      this.resetProject()
+      this.settingDialogVisible = true
+      this.status = 1
+    },
+    // if not set projectInfo, set first (use generator function)
+    handleSave () {
+      if (!this.project.name || !this.project.path) {
+        this.settingDialogVisible = true
+        this.status = 1
+        return
+      }
+      this.saveProject()
+    },
+    handleDialogCancel () {
+      this.status && (this.status = 0)
+    },
+    handleDialogConfirm () {
+      if (!this.status) return
+      this.saveProject()
+      this.status = 0
     },
     init () {
-      // 加载项目
+      let porjectRE = /(\S+)\\(\S+?)\.vd-project/
       ipcRenderer.on('load:project', (event, paths) => {
         if (!paths || !paths.length) return
-        let [path] = paths
-        let {pages, modules} = Project.load(path)
-        // reset
-        for (let page of this.pages) {
-          this.$store.commit(DEL_PAGE, page)
-        }
-        this.$store.commit(SET_PROJECT, path)
-        this.$store.commit(SET_PAGE, pages)
-        Object.entries(modules).forEach(([key, val]) => {
-          this.$store.registerModule(key, val)
-        })
+        let [projectPath] = paths
+        let {pages, modules} = Project.load(projectPath)
+        this.resetProject()
+        let [, path, name] = projectPath.match(porjectRE)
+        this.loadProject({name, path, pages, modules})
         this.replaceTo(`?id=${this.pages[0].id}`)
         this.reRender()
       })
@@ -200,6 +235,7 @@ export default {
       padding: 0 24px;
       .iconfont {
         font-size: 20px!important;
+        color: grey;
       }
     }
   }
@@ -225,6 +261,7 @@ export default {
     &-bar {
       .iconfont {
         font-size: 20px;
+        color: grey;
       }
     }
     .container {

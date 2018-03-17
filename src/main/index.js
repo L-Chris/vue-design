@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -34,7 +34,6 @@ function createWindow () {
   })
 
   mainWindow.on('maximize', () => {
-    console.log(1)
     mainWindow.webContents.send('window:maximize')
   })
 
@@ -59,41 +58,16 @@ function createWindow () {
     mainWindow.close()
   })
 
-  createMenu(mainWindow)
-}
-
-function createMenu (window) {
-  const template = [
-    {
-      label: 'file',
-      submenu: [
-        {
-          label: 'import',
-          click () {
-            dialog.showOpenDialog({
-              filters: [
-                { name: 'Project', extensions: ['json'] }
-              ],
-              properties: ['openFile']
-            }, paths => {
-              window.webContents.send('load:project', paths)
-            })
-          }
-        }
-      ]
-    }
-    // {
-    //   label: 'edit',
-    //   submenu: []
-    // },
-    // {
-    //   label: 'setting',
-    //   submenu: []
-    // }
-  ]
-
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  ipcMain.on('load:project', () => {
+    dialog.showOpenDialog({
+      filters: [
+        { name: 'Project', extensions: ['vd-project'] }
+      ],
+      properties: ['openFile']
+    }, paths => {
+      mainWindow.webContents.send('load:project', paths)
+    })
+  })
 }
 
 app.on('ready', createWindow)
