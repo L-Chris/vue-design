@@ -4,6 +4,14 @@ export const spliceIf = (collection, fn) => {
   return collection
 }
 
+export function partition (collection, predicate) {
+  let result = [[], []]
+  collection.forEach(_ => {
+    result[predicate(_) ? 0 : 1].push(_)
+  })
+  return result
+}
+
 // 对对象解析路径下的属性
 const bailRE = /[^\w.$]/
 export const parsePath = path => {

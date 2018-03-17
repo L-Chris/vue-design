@@ -1,5 +1,5 @@
-import Project from './models/Project'
+const files = require.context('.', true, /models\/[^/]+\.js$/)
 
-export {
-  Project
-}
+files.keys().forEach(key => {
+  module.exports[key.replace(/\.\/models\/|\.js/g, '')] = files(key).default
+})
