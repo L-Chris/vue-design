@@ -82,19 +82,19 @@ export function wrapComponent ({tag, originTag, config: {Props}}) {
 }
 
 // 拼接组件属性
-export function parseAttrs ({props, config}) {
-  function parseAttr (key, val, type) {
+export function stringifyAttributes ({props, config}) {
+  function stringifyAttribute (key, val, type) {
     return `${type !== 'String' ? ':' : ''}${key}="${val}"`
   }
   let propsModel = config.Props
   return propsModel.reduce((pre, {key, type, default: defaultValue}) =>
-    defaultValue === props[key] ? pre : `${pre} ${parseAttr(key, props[key], type)}`
+    defaultValue === props[key] ? pre : `${pre} ${stringifyAttribute(key, props[key], type)}`
     , '')
 }
 
 // 组件转换为模板字符串
-export function parseTemplate (components) {
+export function stringifyTemplate (components) {
   return components.reduce((pre, {props: { slots, ...props }, setting: { label, config }}) => {
-    return `${pre}<${label} ${parseAttrs({props, config})}>${slots.length ? parseTemplate(slots) : ''}</${label}>`
+    return `${pre}<${label} ${stringifyAttributes({props, config})}>${slots.length ? stringifyTemplate(slots) : ''}</${label}>`
   }, '')
 }

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {spliceIf, guid, recursiveFindBy, recursiveSpliceBy} from '@/utils'
+import layouts from '@/layouts'
 import blocks from '@/blocks'
 import widgets from '@/widgets'
 import pageModule from './modules/page'
@@ -12,9 +13,11 @@ let store = new Vuex.Store({
   state: {
     project: {
       name: '',
-      path: ''
+      path: '',
+      componentLibrary: 0
     },
     pages: [],
+    layouts,
     blocks,
     widgets,
     selectedPage: null,
@@ -80,7 +83,7 @@ let store = new Vuex.Store({
         this.unregisterModule(page.id)
       }
       commit(types.SET_PAGE, [])
-      commit(types.SET_PROJECT, { name: '', path: '' })
+      commit(types.SET_PROJECT, { name: '', path: '', componentLibrary: 0 })
     },
     loadProject ({commit, state}, {name, path, pages, modules}) {
       commit(types.SET_PROJECT, { name, path })

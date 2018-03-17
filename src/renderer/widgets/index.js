@@ -2,14 +2,14 @@ import wrapWidget from './wrapWidget'
 import {partition} from '@/utils'
 const files = require.context('.', true, /\.(\/[^/]+){3}\.js$/)
 const modules = {}
-const moduleList = []
+const widgetList = []
 const prefixRE = /\.\/(.+?)\//
 
 function classifyModule (key, file) {
   let prefix = key.match(prefixRE)[1]
   if (!modules[prefix]) modules[prefix] = []
   modules[prefix].push(file)
-  moduleList.push(file)
+  widgetList.push(file)
 }
 
 let [customList, defaultList] = partition(files.keys(), _ => _.includes('index.js'))
@@ -20,9 +20,9 @@ customList.forEach(key => classifyModule(key, files(key).default))
 defaultList.forEach(key => classifyModule(key, wrapWidget(files(key).default)))
 
 export function installWidgets (Vue) {
-  moduleList.forEach(_ => {
+  widgetList.forEach(_ => {
     Vue.component(_.setting.tag, _.component)
   })
 }
-
+export {widgetList}
 export default modules

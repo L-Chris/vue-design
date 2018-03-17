@@ -8,7 +8,7 @@
 import {codemirror} from 'vue-codemirror'
 import pretty from 'pretty'
 import {mapGetters} from 'vuex'
-import {parseTemplate} from '@/utils/component'
+import {stringifyTemplate} from '@/utils/component'
 import 'codemirror/lib/codemirror.css'
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
       return pretty(`${this.template}${this.scripts}${this.styles}`)
     },
     template () {
-      return `<template><section>${parseTemplate(this.components)}</section></template>`
+      return `<template><section>${stringifyTemplate(this.components)}</section></template>`
     },
     scripts () {
       /* eslint-disable */
