@@ -14,7 +14,7 @@ function getTypeConstructor (type) {
 }
 
 export function createProps ($props) {
-  if (!$props) return {}
+  if (!$props) return () => ({})
   return (props = {}) => $props.reduce((pre, {key, default: defaultValue}) => {
     pre[key] = Reflect.has(props, key) ? props[key] : defaultValue
     return pre

@@ -65,19 +65,19 @@ const map = (collection, iteratee, parseChildren, output = [], stack = []) => {
 }
 
 // 递归map
-export function recursiveMap (collection, iteratee, childrenKey) {
-  const parseChildren = parsePath(childrenKey)
+export function recursiveMap (collection, iteratee, path) {
+  const parseChildren = path.includes('.') ? parsePath(path) : _ => _[path]
   return map(collection, iteratee, parseChildren)
 }
 
 // 递归查询
 export function recursiveFind (collection, predicate, path) {
-  const parseChildren = parsePath(path)
+  const parseChildren = path.includes('.') ? parsePath(path) : _ => _[path]
   return recursive(collection, predicate, identity, parseChildren)
 }
 // 递归删除
 export function recursiveSpliceBy (collection, predicate, path) {
-  const parseChildren = parsePath(path)
+  const parseChildren = path.includes('.') ? parsePath(path) : _ => _[path]
   return recursive(collection, predicate, (_, i, arr) => arr.splice(i, 1), parseChildren)
 }
 

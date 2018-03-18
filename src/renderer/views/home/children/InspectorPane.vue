@@ -1,7 +1,8 @@
 <template>
-  <v-container class="inspector" fluid>
+  <section class="inspector pl-4 pr-3 pb-3">
     <template v-if="this.selectedComponent">
-      <span class="subheading">{{selectedComponent.setting.label}}</span>
+      <div class="body-2 pb-2">{{this.selectedComponent.setting.label}}</div>
+      <div class="body-2">Props</div>
       <v-layout v-for="_ in selectedComponent.setting.config.Props" :key="_.key" row style="height:48px;">
         <v-flex xs6>
           <v-subheader>{{_.label}}</v-subheader>
@@ -27,7 +28,7 @@
         </v-flex>
       </v-layout>
     </template>
-  </v-container>
+  </section>
 </template>
 
 <script>
@@ -46,7 +47,7 @@ export default {
   watch: {
     selectedComponent (val) {
       if (!val) return
-      this.props = createProps(this.parsePath('setting.config.Prop')(val))
+      this.props = createProps(this.parsePath('setting.config.Props')(val))(this.selectedComponent.props)
     }
   },
   methods: {

@@ -5,18 +5,16 @@
         <i class="iconfont icon-search client-search-icon"/>
       </div>
     </v-text-field>
-    <div v-for="(f, fname) in filteredWidgets" :key="fname">
-      <v-list subheader dense>
-        <v-list-tile v-for="_ in f" :key="_.id" @click="()=>{}" @dragstart.native="handleDrag(_)" draggable>
-          <v-list-tile-content>{{_.setting.label}}</v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </div>
+    <v-list subheader dense>
+      <v-list-tile v-for="_ in filteredWidgets" :key="_.id" @click="()=>{}" @dragstart.native="handleDrag(_)" draggable>
+        <v-list-tile-content>{{_.setting.label}}</v-list-tile-content>
+      </v-list-tile>
+    </v-list>
   </section>
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapGetters, mapActions} from 'vuex'
 export default {
   data () {
     return {
@@ -25,11 +23,9 @@ export default {
   },
   computed: {
     ...mapState(['widgets']),
+    ...mapGetters(['componentLibrary']),
     filteredWidgets () {
-      return Object.entries(this.widgets).reduce((pre, [key, val]) => {
-        pre[key] = val.filter(_ => _.setting.label.toLowerCase().includes(this.name))
-        return pre
-      }, {})
+      return this.widgets[this.componentLibrary.label].filter(_ => _.setting.label.toLowerCase().includes(this.name))
     }
   },
   methods: {

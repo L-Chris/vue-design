@@ -4,6 +4,7 @@ import {spliceIf, guid, recursiveFind, recursiveSpliceBy} from '@/utils'
 import layouts from '@/layouts'
 import blocks from '@/blocks'
 import widgets from '@/widgets'
+import {componentLibrarys} from '@/utils/const'
 import pageModule from './modules/page'
 import * as types from './mutation-types'
 
@@ -26,6 +27,9 @@ let store = new Vuex.Store({
     selectedWidget: null
   },
   getters: {
+    componentLibrary (state) {
+      return componentLibrarys.find(_ => _.value === state.project.componentLibrary)
+    },
     pageId (state) {
       return state.route.query.id
     },
