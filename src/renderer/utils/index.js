@@ -4,6 +4,14 @@ export const spliceIf = (collection, fn) => {
   return collection
 }
 
+export function partition (collection, predicate) {
+  let result = [[], []]
+  collection.forEach(_ => {
+    result[predicate(_) ? 0 : 1].push(_)
+  })
+  return result
+}
+
 // 对对象解析路径下的属性
 const bailRE = /[^\w.$]/
 export const parsePath = path => {
@@ -19,7 +27,7 @@ export const parsePath = path => {
 }
 
 let id = 1000
-export const guid = () => id++
+export const guid = () => (id++).toString()
 
 export const getOwnProperty = obj => {
   return Object.keys(obj).reduce((pre, _) => {
@@ -28,7 +36,15 @@ export const getOwnProperty = obj => {
   }, {})
 }
 
-export function convertToProject (pages) {
+export function recursiveSetId (collection, parent) {
+  for (let _ of collection) {
+    _.id = guid()
+    _.parent = parent
+    if (_.props.slots.length) {
+      recursiveSetId(_.props.slots, _.id)
+    }
+  }
+  return collection
 }
 
 // 递归map

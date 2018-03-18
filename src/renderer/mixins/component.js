@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import {mapGetters} from 'vuex'
-import {createElement, recursiveFindBy} from '@/utils'
+import {createElement} from '@/utils'
 
 export default {
   computed: {
@@ -12,7 +12,7 @@ export default {
       const instance = new Vue({
         el: document.getElementById(id),
         render (h) {
-          let component = recursiveFindBy(that.components, _ => _.id === id, 'props.slots')
+          let component = that.components.find(_ => _.id === id)
           // if (!component) return this.$destroy()
           if (!component) return
           let {setting: { tag }, props} = component

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import pretty from 'pretty'
-import {parseTemplate} from '@/utils/component'
+import {stringifyTemplate} from '@/utils/component'
 
 class Project {
   // constructor () {}
@@ -40,7 +40,7 @@ class Project {
     }
     for (let page of data) {
       let {id, components} = page
-      let code = `<template><section>${parseTemplate(components)}</section></template>${scripts}${styles}`
+      let code = `<template><section>${stringifyTemplate(components)}</section></template>${scripts}${styles}`
       code = pretty(code)
       fs.writeFile(`${fullPath}/${id}.vue`, code, err => {
         if (err) console.log(err)

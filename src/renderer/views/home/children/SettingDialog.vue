@@ -18,6 +18,9 @@
                 <i class="iconfont icon-import"/>
               </v-btn>
             </v-flex>
+            <v-flex xs11>
+              <v-select v-model="projectInfo.componentLibrary" :items="componentLibrarys" item-text="label" label="Component Library"/>
+            </v-flex>
           </v-layout>          
         </v-form>
       </v-card-text>
@@ -33,6 +36,7 @@
 <script>
 import { remote } from 'electron'
 import {mapState} from 'vuex'
+import {componentLibrarys} from '@/utils/const'
 import {SET_PROJECT} from '@/store/mutation-types'
 export default {
   props: {
@@ -43,9 +47,11 @@ export default {
   },
   data () {
     return {
+      componentLibrarys,
       projectInfo: {
         name: '',
-        path: ''
+        path: '',
+        componentLibrary: 0
       },
       rules: {
         name: [
