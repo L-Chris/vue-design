@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {spliceIf, guid, recursiveFindBy, recursiveSpliceBy} from '@/utils'
+import {spliceIf, guid, recursiveFind, recursiveSpliceBy} from '@/utils'
 import layouts from '@/layouts'
 import blocks from '@/blocks'
 import widgets from '@/widgets'
@@ -60,12 +60,17 @@ let store = new Vuex.Store({
       let {id: pageId} = state.selectedPage
       recursiveSpliceBy(state[pageId].components, _ => _.id === id, 'props.slots')
     },
-    [types.UPDATE_COMPONENT] (state, options) {
+    [types.UPDATE_COMPONENT] (state, {id, props}) {
       let pageState = state[state.selectedPage.id]
-      const {id} = options
-      let component = recursiveFindBy(pageState.components, _ => _.id === id, 'props.slots')
+      let component = recursiveFind(pageState.components, _ => _.id === id, 'props.slots')
       if (!component) return
-      Object.assign(component, options)
+      Object.assign(component, {props})
+    },
+    [types.ADD_COMPONENT_SLOT] (state, {id, slot}) {
+      let pageState = state[state.selectedPage.id]
+      let component = recursiveFind(pageState.components, _ => _.id === id, 'props.slots')
+      if (!component) return
+      component.props.slots.push(slot)
     },
     [types.SET_SELECTED_PAGE] (state, page) {
       state.selectedPage = page

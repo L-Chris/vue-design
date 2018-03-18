@@ -1,3 +1,6 @@
+export const noop = () => {}
+export const identity = _ => _
+
 export const spliceIf = (collection, fn) => {
   let index = collection.findIndex(_ => fn(_))
   if (index >= 0) collection.splice(index, 1)
@@ -26,65 +29,56 @@ export const parsePath = path => {
   }
 }
 
-let id = 1000
-export const guid = () => (id++).toString()
+export const guid = (id => () => (id++).toString())(1000)
 
-export const getOwnProperty = obj => {
-  return Object.keys(obj).reduce((pre, _) => {
-    pre[_] = obj[_]
-    return pre
-  }, {})
-}
-
-export function recursiveSetId (collection, parent) {
-  for (let _ of collection) {
-    _.id = guid()
-    _.parent = parent
-    if (_.props.slots.length) {
-      recursiveSetId(_.props.slots, _.id)
-    }
-  }
-  return collection
-}
-
-// 递归map
-export function recursiveMap (collection, childrenKey) {
-  let children
-  for (let _ of collection) {
-    children = parsePath(childrenKey)(_)
-    if (children && children.length) {
-      _.children = recursiveMap(children, childrenKey)
-    } else {
-      _.children = []
-    }
-  }
-  return collection
-}
-
-// 递归查询
-export function recursiveFindBy (collection, condition, childrenKey = 'children') {
-  let children, result
-  for (let _ of collection) {
-    if (condition(_)) return _
-    children = parsePath(childrenKey)(_)
-    if (children && children.length) {
-      result = recursiveFindBy(children, condition, childrenKey)
-      if (result) return result
-    }
-  }
-}
-// 递归删除
-export function recursiveSpliceBy (collection, condition, childrenKey = 'children') {
+// 递归
+const recursive = (collection, predicate, iteratee, parseChildren) => {
   let children, result
   for (let i = 0, len = collection.length; i < len; i++) {
     let _ = collection[i]
-    if (condition(_)) return collection.splice(i, 1)
-    children = parsePath(childrenKey)(_)
+    if (predicate(_)) return iteratee(_, i, collection)
+    children = parseChildren(_)
     if (children && children.length) {
-      result = recursiveSpliceBy(children, condition, childrenKey)
+      result = recursive(children, predicate, iteratee, parseChildren)
       if (result) return result
     }
   }
+}
+
+const map = (collection, iteratee, parseChildren, output = [], stack = []) => {
+  let children
+  for (let i = 0, len = collection.length; i < len; i++) {
+    let _ = collection[i]
+    stack.push(iteratee(_))
+    children = parseChildren(_)
+    if (children && children.length) map(children, iteratee, parseChildren, output, stack)
+    let pNode = stack.pop()
+    if (stack.length) {
+      let parentNode = stack[stack.length - 1]
+      if (!parentNode.children) parentNode.children = []
+      parentNode.children.push(pNode)
+    } else {
+      output.push(pNode)
+    }
+  }
+  return output
+}
+
+// 递归map
+export function recursiveMap (collection, iteratee, childrenKey) {
+  const parseChildren = parsePath(childrenKey)
+  return map(collection, iteratee, parseChildren)
+}
+
+// 递归查询
+export function recursiveFind (collection, predicate, path) {
+  const parseChildren = parsePath(path)
+  return recursive(collection, predicate, identity, parseChildren)
+}
+// 递归删除
+export function recursiveSpliceBy (collection, predicate, path) {
+  const parseChildren = parsePath(path)
+  return recursive(collection, predicate, (_, i, arr) => arr.splice(i, 1), parseChildren)
 }
 
 // 创建挂载点

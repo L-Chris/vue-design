@@ -1,24 +1,24 @@
 <template>
   <v-container class="inspector" fluid>
-    <template v-if="component.setting&&component.props">
-      <span class="subheading">{{component.setting.label}}</span>
-      <v-layout v-for="_ in component.setting.config.Props" :key="_.key" row style="height:48px;">
+    <template v-if="this.selectedComponent">
+      <span class="subheading">{{selectedComponent.setting.label}}</span>
+      <v-layout v-for="_ in selectedComponent.setting.config.Props" :key="_.key" row style="height:48px;">
         <v-flex xs6>
           <v-subheader>{{_.label}}</v-subheader>
         </v-flex>
         <v-flex class="inspector-field" xs6>
-          <v-select v-if="_.inputType==='select'" v-model="component.props[_.key]" :items="_.data" item-text="label" item-value="value" @change="handleChange" clearable/>
-          <v-switch v-else-if="_.inputType==='switch'" v-model="component.props[_.key]" hide-details @change="handleChange"/>
+          <v-select v-if="_.inputType==='select'" v-model="props[_.key]" :items="_.data" item-text="label" @change="handleChange" clearable/>
+          <v-switch v-else-if="_.inputType==='switch'" v-model="props[_.key]" hide-details @change="handleChange"/>
           <v-text-field
             v-else-if="_.type==='Number'"
-            v-model.number="component.props[_.key]"
+            v-model.number="props[_.key]"
             :required="_.required"
             @change="handleChange"
             single-line
           />
           <v-text-field
             v-else
-            v-model="component.props[_.key]"
+            v-model="props[_.key]"
             :placeholder="_.default"
             :required="_.required"
             @change="handleChange"
@@ -32,11 +32,12 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import {createProps} from '@/utils/component'
 import {UPDATE_COMPONENT} from '@/store/mutation-types'
 export default {
   data () {
     return {
-      component: {}
+      props: {}
     }
   },
   computed: {
@@ -44,16 +45,16 @@ export default {
   },
   watch: {
     selectedComponent (val) {
-      if (!val) {
-        this.component = {}
-      } else {
-        this.component = JSON.parse(JSON.stringify(this.selectedComponent))
-      }
+      if (!val) return
+      this.props = createProps(this.parsePath('setting.config.Prop')(val))
     }
   },
   methods: {
     handleChange () {
-      this.$store.commit(UPDATE_COMPONENT, this.component)
+      this.$store.commit(UPDATE_COMPONENT, {
+        id: this.selectedComponent.id,
+        props: this.props
+      })
     }
   }
 }

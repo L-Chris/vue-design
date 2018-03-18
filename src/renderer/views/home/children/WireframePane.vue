@@ -23,10 +23,10 @@
 <script>
 import SelectedMask from './SelectedMask'
 import throttle from 'lodash.throttle'
-import {mapState, mapGetters, mapActions} from 'vuex'
 import componentMixins from '@/mixins/component'
-import {SET_SELECTED_COMPONENT, SET_SELECTED_WIDGET, UPDATE_COMPONENT} from '@/store/mutation-types'
-import {createElement, guid, recursiveFindBy} from '@/utils'
+import {mapState, mapGetters, mapActions} from 'vuex'
+import {createElement, guid, recursiveFind} from '@/utils'
+import {SET_SELECTED_COMPONENT, SET_SELECTED_WIDGET, ADD_COMPONENT_SLOT} from '@/store/mutation-types'
 export default {
   components: {
     SelectedMask
@@ -73,10 +73,10 @@ export default {
       })
     },
     // 根据所选widget创建组件信息
-    createComponentInfo (id, parent) {
+    createComponentInfo (id, parent, slot) {
       let {createProps, setting} = this.selectedWidget
       let props = createProps()
-      return {id, parent, props, setting}
+      return {id, parent, slot, props, setting}
     },
     // drop触发组件挂载
     handleDrop ({target}) {
@@ -89,11 +89,9 @@ export default {
     },
     handleDropInSlot (name) {
       if (!this.selectedWidget || !this.selectedComponent) return
-      let component = this.createComponentInfo(guid(), this.selectedComponent.id)
-      component.slot = name
-      let selectedComponent = JSON.parse(JSON.stringify(this.selectedComponent))
-      selectedComponent.props.slots.push(component)
-      this.$store.commit(UPDATE_COMPONENT, selectedComponent)
+      let {id} = this.selectedComponent
+      let component = this.createComponentInfo(guid(), id, name)
+      this.$store.commit(ADD_COMPONENT_SLOT, {id, slot: component})
       this.$store.commit(SET_SELECTED_WIDGET, null)
       this.resetMenu(this.slotMenu)
     },
@@ -122,7 +120,7 @@ export default {
       let component = null
       for (let element of path) {
         if (!element.id) continue
-        component = recursiveFindBy(this.components, _ => _.id === element.id, 'props.slots')
+        component = recursiveFind(this.components, _ => _.id === element.id, 'props.slots')
         if (component) {
           this.$store.commit(SET_SELECTED_COMPONENT, component)
           return component

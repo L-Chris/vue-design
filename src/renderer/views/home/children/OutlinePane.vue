@@ -1,26 +1,34 @@
 <template>
   <section>
-    <ElTree ref="tree" :data="componentTree" node-key="id" :props="defaultProps" @node-click="handleSelect" @node-contextmenu="handleDelete" empty-text="No Data" highlight-current/>
+    <ElTree
+      ref="tree"
+      :data="componentTree"
+      @node-click="handleSelect"
+      @node-contextmenu="handleDelete"
+      node-key="id"
+      empty-text="No Data"
+      highlight-current
+      default-expand-all
+    />
   </section>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import {spliceIf, recursiveMap} from '@/utils'
+import {spliceIf, recursiveMap, recursiveFind} from '@/utils'
 import {SET_SELECTED_COMPONENT} from '@/store/mutation-types'
 export default {
-  data () {
-    return {
-      defaultProps: {
-        label: _ => _.setting.label,
-        children: 'children'
-      }
-    }
-  },
   computed: {
     ...mapGetters(['components', 'selectedComponent']),
     componentTree () {
-      return recursiveMap(JSON.parse(JSON.stringify(this.components)), 'props.slots')
+      return recursiveMap(
+        this.components,
+        _ => ({
+          id: _.id,
+          label: _.setting.label
+        }),
+        'props.slots'
+      )
     }
   },
   watch: {
@@ -31,7 +39,8 @@ export default {
   methods: {
     ...mapActions(['deleteComponent']),
     handleSelect (e, {data}) {
-      this.$store.commit(SET_SELECTED_COMPONENT, data)
+      let component = recursiveFind(this.components, _ => _.id === data.id, 'props.slots')
+      this.$store.commit(SET_SELECTED_COMPONENT, component)
     },
     // 若当前node的key与已选页的id不等，则触发选择
     setCurrentKey (id = this.selectedComponent.id) {
@@ -42,9 +51,6 @@ export default {
       spliceIf(children, c => c.id === node.id)
       this.deleteComponent(_)
     }
-  },
-  activated () {
-    this.setCurrentKey()
   }
 }
 </script>

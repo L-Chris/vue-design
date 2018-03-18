@@ -1,3 +1,5 @@
+import {parsePath} from '@/utils'
+
 export default {
   methods: {
     linkTo (path) {
@@ -5,6 +7,7 @@ export default {
     },
     replaceTo (path) {
       this.$router.replace(path)
-    }
+    },
+    parsePath
   }
 }

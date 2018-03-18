@@ -34,7 +34,7 @@ export default {
       const parent = 'wrapper'
       const {id} = this.selectedLayout
       createElement(document.getElementById(parent), id)
-      let layout = { parent, ...this.selectedLayout }
+      let layout = JSON.parse(JSON.stringify({ parent, ...this.selectedLayout }))
       this.addComponent(layout)
       this.createComponent(layout)
       this.$store.commit(SET_SELECTED_LAYOUT, null)
