@@ -1,3 +1,7 @@
+export const ADD_LAYOUT = 'ADD_LAYOUT'
+export const DEL_LAYOUT = 'DEL_LAYOUT'
+export const SET_LAYOUT = 'SET_LAYOUT'
+export const SET_SELECTED_LAYOUT = 'SET_SELECTED_LAYOUT'
 export const ADD_BLOCK = 'ADD_BLOCK'
 export const DEL_BLOCK = 'DEL_BLOCK'
 export const SET_BLOCK = 'SET_BLOCK'

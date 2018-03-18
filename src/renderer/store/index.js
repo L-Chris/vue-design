@@ -21,6 +21,7 @@ let store = new Vuex.Store({
     blocks,
     widgets,
     selectedPage: null,
+    selectedLayout: null,
     selectedBlock: null,
     selectedWidget: null
   },
@@ -49,6 +50,9 @@ let store = new Vuex.Store({
     [types.SET_PAGE] (state, pages) {
       state.pages = pages
     },
+    [types.SET_COMPONENT] (state, components) {
+      state[state.selectedPage.id].components = components
+    },
     [types.ADD_COMPONENT] (state, component) {
       state[state.selectedPage.id].components.push(component)
     },
@@ -75,6 +79,13 @@ let store = new Vuex.Store({
     },
     [types.SET_SELECTED_WIDGET] (state, widget) {
       state.selectedWidget = widget
+    },
+    [types.SET_LAYOUT] (state, layout) {
+      let pageState = state[state.selectedPage.id]
+      pageState.layout = layout
+    },
+    [types.SET_SELECTED_LAYOUT] (state, layout) {
+      state.selectedLayout = layout
     }
   },
   actions: {
@@ -103,6 +114,10 @@ let store = new Vuex.Store({
         commit(types.SET_SELECTED_COMPONENT, null)
       }
       commit(types.SET_SELECTED_WIDGET, widget)
+    },
+    resetPage ({commit, state}) {
+      commit(types.SET_COMPONENT, [])
+      commit(types.SET_SELECTED_COMPONENT, null)
     },
     addPage ({state, commit}, {id = `page${guid()}`, label = id, children = []} = {}) {
       this.registerModule(id, pageModule)

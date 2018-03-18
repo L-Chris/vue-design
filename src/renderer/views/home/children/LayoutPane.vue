@@ -1,12 +1,7 @@
 <template>
   <section class="layouts">
-    <v-text-field class="pt-0 pl-3 pr-3" placeholder="name" v-model="name" single-line hide-details>
-      <div class="layouts-search" slot="label">
-        <i class="iconfont icon-search client-search-icon"/>
-      </div>
-    </v-text-field>
     <v-list subheader dense>
-      <v-list-tile v-for="_ in filteredLayouts" :key="_.id" @click="()=>{}" @dragstart.native="handleDrag(_)" draggable>
+      <v-list-tile v-for="_ in layouts" :key="_.id" @click="handleSelect(_)">
         <v-list-tile-content>{{_.label}}</v-list-tile-content>
       </v-list-tile>
     </v-list>
@@ -15,22 +10,34 @@
 
 <script>
 import {mapState, mapActions} from 'vuex'
+import componentMixins from '@/mixins/component'
+import {createElement} from '@/utils'
+import {SET_SELECTED_LAYOUT} from '@/store/mutation-types'
 export default {
+  mixins: [componentMixins],
   data () {
     return {
       name: ''
     }
   },
   computed: {
-    ...mapState(['layouts']),
-    filteredLayouts () {
-      return this.layouts.filter(_ => _.label.toLowerCase().includes(this.name))
-    }
+    ...mapState(['layouts', 'selectedLayout'])
   },
   methods: {
-    ...mapActions(['selectWidget']),
-    handleDrag (_) {
-      this.selectWidget(_)
+    ...mapActions(['addComponent', 'resetPage']),
+    handleSelect (_) {
+      this.$store.commit(SET_SELECTED_LAYOUT, _)
+      this.resetPage()
+      this.createLayout()
+    },
+    createLayout () {
+      const parent = 'wrapper'
+      const {id} = this.selectedLayout
+      createElement(document.getElementById(parent), id)
+      let layout = { parent, ...this.selectedLayout }
+      this.addComponent(layout)
+      this.createComponent(layout)
+      this.$store.commit(SET_SELECTED_LAYOUT, null)
     }
   }
 }

@@ -1,5 +1,6 @@
 import fs from 'fs'
 import htmlParser from 'htmlparser2'
+import {guid} from '@/utils'
 import {widgetList} from '@/widgets'
 
 let rootNode = null
@@ -10,7 +11,7 @@ const parser = new htmlParser.Parser({
   onopentag (originTag, props = {}) {
     if (originTag === 'template') return
     let {createProps, setting} = widgetList.find(_ => _.setting.originTag === originTag)
-    node = {props: Object.assign(createProps(), props), setting}
+    node = {id: guid(), props: Object.assign(createProps(), props), setting}
     stack.push(node)
   },
   ontext (text) {
@@ -26,6 +27,7 @@ const parser = new htmlParser.Parser({
     } else {
       let parentNode = stack[stack.length - 1]
       if (!parentNode.props.slots) parentNode.props.slots = []
+      pNode.parent = parentNode.id
       parentNode.props.slots.push(pNode)
     }
   },
@@ -41,12 +43,12 @@ export default path => {
   rootNode = null
   node = null
   stack = []
-  let fileName = path.replace(/.+\/|\.vue/g, '')
+  let label = path.replace(/.+\/|\.vue/g, '')
 
   let data = fs.readFileSync(path)
   parser.write(data)
   parser.end()
 
-  rootNode.label = fileName
+  rootNode.label = label
   return rootNode
 }

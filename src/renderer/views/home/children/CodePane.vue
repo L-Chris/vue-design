@@ -31,7 +31,7 @@ export default {
       return pretty(`${this.template}${this.scripts}${this.styles}`)
     },
     template () {
-      return `<template><section>${stringifyTemplate(this.components)}</section></template>`
+      return `<template>${stringifyTemplate(this.components)}</template>`
     },
     scripts () {
       /* eslint-disable */
@@ -47,7 +47,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.CodeMirror {
+  height: auto;
+}
 </style>
 

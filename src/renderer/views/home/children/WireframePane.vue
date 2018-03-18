@@ -89,7 +89,7 @@ export default {
     },
     handleDropInSlot (name) {
       if (!this.selectedWidget || !this.selectedComponent) return
-      let component = this.createComponentInfo(guid().toString(), this.selectedComponent.id)
+      let component = this.createComponentInfo(guid(), this.selectedComponent.id)
       component.slot = name
       let selectedComponent = JSON.parse(JSON.stringify(this.selectedComponent))
       selectedComponent.props.slots.push(component)
