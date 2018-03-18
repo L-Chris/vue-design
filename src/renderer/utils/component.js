@@ -14,13 +14,13 @@ function getTypeConstructor (type) {
 }
 
 export function createProps ($props) {
-  if (!$props) return {}
-  return () => $props.reduce((pre, {key, default: defaultValue}) => {
-    pre[key] = defaultValue
+  if (!$props) return () => ({})
+  return (props = {}) => $props.reduce((pre, {key, default: defaultValue}) => {
+    pre[key] = Reflect.has(props, key) ? props[key] : defaultValue
     return pre
   }, {
-    slots: [],
-    domProps: []
+    slots: props.slots || [],
+    style: props.style || {}
   })
 }
 
@@ -33,7 +33,7 @@ export const toProps = ($props) => {
       return pre
     }, {
       slots: that.slots,
-      domProps: that.domProps
+      style: that.style
     })
   }
 }
@@ -54,7 +54,7 @@ export function toPropsModel ($props) {
     }
   },
   {
-    domProps: {
+    style: {
       type: Object,
       default: () => ({})
     }
@@ -69,12 +69,14 @@ export function wrapComponent ({tag, originTag, config: {Props}}) {
       return h(
         originTag,
         {
-          props: toProps(Props).call(this)
+          props: toProps(Props).call(this),
+          style: this.style
         },
         this.slots.map(_ => h(_.setting.tag, {
           slot: _.slot,
           attrs: { id: _.id },
-          props: _.props
+          props: _.props,
+          style: _.props.style
         }))
       )
     }

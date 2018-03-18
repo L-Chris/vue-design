@@ -13,7 +13,7 @@ const setting = Object.freeze({
         inputType: 'select',
         default: 'vertical',
         data: [
-          { value: 'horizontal ', label: 'horizontal ' },
+          { value: 'horizontal', label: 'horizontal' },
           { value: 'vertical', label: 'vertical' }
         ]
       }

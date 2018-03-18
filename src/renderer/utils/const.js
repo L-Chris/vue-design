@@ -1,4 +1,4 @@
 export const componentLibrarys = [
-  { label: 'ElementUI', value: 0 },
-  { label: 'Vuetify', value: 1 }
+  { label: 'element-ui', value: 0 },
+  { label: 'vuetify', value: 1 }
 ]

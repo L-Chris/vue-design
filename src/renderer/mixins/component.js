@@ -16,7 +16,7 @@ export default {
           // if (!component) return this.$destroy()
           if (!component) return
           let {setting: { tag }, props} = component
-          return h(tag, { props, attrs: { id } })
+          return h(tag, { props, style: props.style, attrs: { id } })
         }
       })
       instance.$mount()

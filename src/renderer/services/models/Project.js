@@ -19,9 +19,10 @@ class Project {
           state () {
             return {
               components,
-              selectedComponent: null,
+              selectedLayout: null,
               selectedBlock: null,
-              selectedWidget: null
+              selectedWidget: null,
+              selectedComponent: null
             }
           }
         }
@@ -40,7 +41,7 @@ class Project {
     }
     for (let page of data) {
       let {id, components} = page
-      let code = `<template><section>${stringifyTemplate(components)}</section></template>${scripts}${styles}`
+      let code = `<template>${stringifyTemplate(components)}</template>${scripts}${styles}`
       code = pretty(code)
       fs.writeFile(`${fullPath}/${id}.vue`, code, err => {
         if (err) console.log(err)
