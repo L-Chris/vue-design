@@ -10,7 +10,7 @@
 ## ✨ Features:
 
 - desktop application build with electron
-- design page with dragable components
+- design page with dragable and editable components
 - save as .vue files
 - import a saved project
 
@@ -39,7 +39,7 @@ npm run lint
 ```
 
 ## 🛣 Pending
-- edit component css (2018/03-2018/04)
+- edit component css (2018/03-2018/04) [√]
 - more build-in layouts、blocks and widgets (2018/03-2018/04)
 - watch .vue files and sync to the project (2018/04)
 - widgets and blocks market  (2018/04)
