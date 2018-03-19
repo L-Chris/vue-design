@@ -31,12 +31,15 @@ export default {
       this.createLayout()
     },
     createLayout () {
-      const parent = 'wrapper'
+      const parentId = 'wrapper'
       const {id} = this.selectedLayout
-      createElement(document.getElementById(parent), id)
-      let layout = JSON.parse(JSON.stringify({ parent, ...this.selectedLayout }))
-      this.addComponent(layout)
-      this.createComponent(layout)
+      let parent = document.getElementById(parentId)
+      if (parent) {
+        createElement(parent, id)
+        let layout = JSON.parse(JSON.stringify({ parent: parentId, ...this.selectedLayout }))
+        this.addComponent(layout)
+        this.createComponent(layout)
+      }
       this.$store.commit(SET_SELECTED_LAYOUT, null)
     }
   }

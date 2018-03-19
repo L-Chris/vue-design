@@ -56,7 +56,7 @@ const map = (collection, iteratee, parseChildren, output = [], stack = []) => {
     if (stack.length) {
       let parentNode = stack[stack.length - 1]
       if (!parentNode.children) parentNode.children = []
-      parentNode.children.push(pNode)
+      pNode && parentNode.children.push(pNode)
     } else {
       output.push(pNode)
     }

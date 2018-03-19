@@ -115,6 +115,7 @@ export function stringifyAttributes ({props, config}) {
 // 组件转换为模板字符串
 export function stringifyTemplate (components) {
   return components.reduce((pre, {props: { slots, ...props }, setting: { label, config }}) => {
+    if (label === 'style') return pre
     return `${pre}<${label} ${stringifyAttributes({props, config})}>${slots.length ? stringifyTemplate(slots) : ''}</${label}>`
   }, '')
 }

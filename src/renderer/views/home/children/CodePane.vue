@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import {codemirror} from 'vue-codemirror'
 import pretty from 'pretty'
+import {codemirror} from 'vue-codemirror'
 import {mapGetters} from 'vuex'
 import {stringifyTemplate} from '@/utils/component'
 import 'codemirror/lib/codemirror.css'
@@ -17,7 +17,7 @@ export default {
   data () {
     return {
       cmOptions: {
-        tabSize: 4,
+        tabSize: 2,
         theme: 'base16-dark',
         readOnly: true,
         lineNumbers: true,
@@ -26,7 +26,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['components']),
+    ...mapGetters(['components', 'pageCss']),
     code () {
       return pretty(`${this.template}${this.scripts}${this.styles}`)
     },
@@ -38,7 +38,7 @@ export default {
       return `<script>export default {}<\/script>`
     },
     styles () {
-      return `<style>.view {}</style>`
+      return `<style>${this.pageCss ? this.pageCss.props.domProps.innerText : ''}</style>`
     }
   },
   activated () {

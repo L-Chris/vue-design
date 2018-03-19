@@ -38,6 +38,10 @@ let store = new Vuex.Store({
     },
     selectedComponent (state, {pageId}) {
       return state[pageId] ? state[pageId].selectedComponent : null
+    },
+    pageCss (state, {components}) {
+      if (!components.length) return
+      return components[0].props.slots.find(_ => _.setting.label === 'style')
     }
   },
   mutations: {
