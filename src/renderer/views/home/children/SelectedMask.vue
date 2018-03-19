@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     showSelector (el) {
+      if (!el) return
       let {left, top, width, height} = el.getBoundingClientRect()
       this.visible = true
       this.style = {

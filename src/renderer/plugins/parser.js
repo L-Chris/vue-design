@@ -3,13 +3,15 @@ import htmlParser from 'htmlparser2'
 import {guid} from '@/utils'
 import {widgetList} from '@/widgets'
 
+const buildInTags = ['template', 'script', 'style']
+
 let rootNode = null
 let node = null
 let stack = []
 
 const parser = new htmlParser.Parser({
   onopentag (originTag, props = {}) {
-    if (originTag === 'template') return
+    if (buildInTags.includes(originTag)) return
     let {createProps, setting} = widgetList.find(_ => _.setting.originTag === originTag)
     node = {id: guid(), props: Object.assign(createProps(), props), setting}
     stack.push(node)
@@ -20,7 +22,7 @@ const parser = new htmlParser.Parser({
     }
   },
   onclosetag (tagname) {
-    if (tagname === 'template') return
+    if (buildInTags.includes(tagname)) return
     let pNode = stack.pop()
     if (!stack.length) {
       rootNode = pNode
