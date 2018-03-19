@@ -20,6 +20,8 @@ export function createProps ($props) {
     return pre
   }, {
     slots: props.slots || [],
+    domProps: props.domProps || {},
+    class: props.class || '',
     style: props.style || {}
   })
 }
@@ -33,6 +35,8 @@ export const toProps = ($props) => {
       return pre
     }, {
       slots: that.slots,
+      domProps: that.domProps,
+      class: that.class,
       style: that.style
     })
   }
@@ -51,6 +55,18 @@ export function toPropsModel ($props) {
     slots: {
       type: Array,
       default: () => []
+    }
+  },
+  {
+    domProps: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  {
+    class: {
+      type: String,
+      default: ''
     }
   },
   {
@@ -76,6 +92,8 @@ export function wrapComponent ({tag, originTag, config: {Props}}) {
           slot: _.slot,
           attrs: { id: _.id },
           props: _.props,
+          domProps: _.props.domProps,
+          class: _.props.class && _.props.class.split(' '),
           style: _.props.style
         }))
       )
@@ -97,6 +115,7 @@ export function stringifyAttributes ({props, config}) {
 // 组件转换为模板字符串
 export function stringifyTemplate (components) {
   return components.reduce((pre, {props: { slots, ...props }, setting: { label, config }}) => {
+    if (label === 'style') return pre
     return `${pre}<${label} ${stringifyAttributes({props, config})}>${slots.length ? stringifyTemplate(slots) : ''}</${label}>`
   }, '')
 }

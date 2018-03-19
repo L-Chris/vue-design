@@ -5,6 +5,7 @@
       :data="componentTree"
       @node-click="handleSelect"
       @node-contextmenu="handleDelete"
+      :filter-node-method="filterNode"
       node-key="id"
       empty-text="No Data"
       highlight-current
@@ -32,12 +33,21 @@ export default {
     }
   },
   watch: {
-    'selectedComponent' (component) {
+    selectedComponent (component) {
       component && this.$nextTick(() => this.setCurrentKey(component.id))
+    },
+    components: {
+      handler (val) {
+        val && this.$nextTick(() => this.$refs['tree'].filter())
+      },
+      deep: true
     }
   },
   methods: {
     ...mapActions(['deleteComponent']),
+    filterNode (val, data) {
+      return data.label !== 'style'
+    },
     handleSelect (e, {data}) {
       let component = recursiveFind(this.components, _ => _.id === data.id, 'props.slots')
       this.$store.commit(SET_SELECTED_COMPONENT, component)

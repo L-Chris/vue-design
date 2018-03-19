@@ -2,8 +2,19 @@
   <section class="inspector pl-4 pr-3 pb-3">
     <template v-if="this.selectedComponent">
       <div class="body-2 pb-2">{{this.selectedComponent.setting.label}}</div>
-      <div class="body-2">Props</div>
-      <v-layout v-for="_ in selectedComponent.setting.config.Props" :key="_.key" row style="height:48px;">
+      <!-- native attribute -->
+      <div class="body-2">DomProps</div>
+      <v-layout row style="height:44px;">
+        <v-flex xs6>
+          <v-subheader>classList</v-subheader>
+        </v-flex>
+        <v-flex xs6>
+          <v-text-field v-model="props.class" @change="handleChange" single-line/>
+        </v-flex>
+      </v-layout>
+      <!-- compnent attribute -->
+      <div class="body-2 pt-2">Props</div>
+      <v-layout v-for="_ in selectedComponent.setting.config.Props" :key="_.key" row style="height:44px;">
         <v-flex xs6>
           <v-subheader>{{_.label}}</v-subheader>
         </v-flex>

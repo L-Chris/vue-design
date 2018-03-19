@@ -13,10 +13,15 @@ export default {
         el: document.getElementById(id),
         render (h) {
           let component = that.components.find(_ => _.id === id)
-          // if (!component) return this.$destroy()
           if (!component) return
           let {setting: { tag }, props} = component
-          return h(tag, { props, style: props.style, attrs: { id } })
+          return h(tag, {
+            attrs: {id},
+            props,
+            domProps: props.domProps,
+            class: props.class.split(' '),
+            style: props.style
+          })
         }
       })
       instance.$mount()

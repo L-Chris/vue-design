@@ -96,12 +96,12 @@
 </template>
 
 <script>
-import opn from 'opn'
 import {ipcRenderer} from 'electron'
 import TuTitleBar from '@/components/TuTitleBar'
 import TuIconButton from '@/components/TuIconButton'
 import WireframePane from './children/WireframePane'
 import CodePane from './children/CodePane'
+import StylePane from './children/StylePane'
 import SitemapPane from './children/SitemapPane'
 import LayoutPane from './children/LayoutPane'
 import BlockPane from './children/BlockPane'
@@ -120,6 +120,7 @@ export default {
     TuIconButton,
     WireframePane,
     CodePane,
+    StylePane,
     SitemapPane,
     LayoutPane,
     BlockPane,
@@ -130,8 +131,9 @@ export default {
   data () {
     return {
       views: [
-        { id: 0, label: 'Layout', value: 'WireframePane', icon: 'layout', tip: 'view layout' },
-        { id: 1, label: 'Code', value: 'CodePane', icon: 'code', tip: 'view code' }
+        { id: 0, label: 'View', value: 'WireframePane', icon: 'layout', tip: 'edit view' },
+        { id: 1, label: 'Css', value: 'StylePane', icon: 'css', tip: 'edit css' },
+        { id: 2, label: 'Source', value: 'CodePane', icon: 'code', tip: 'view source' }
       ],
       activeIndex: 0,
       settingDialogVisible: false,
@@ -154,6 +156,7 @@ export default {
     },
     // workspace pane
     openBrowser () {
+      const opn = require('opn')
       opn('https://github.com/L-Chris/vue-design-electron')
     },
     activateView (index) {
