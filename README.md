@@ -11,6 +11,7 @@
 
 - desktop application build with electron
 - design page with dragable and editable components
+- edit page css
 - save as .vue files
 - import a saved project
 
@@ -18,6 +19,11 @@
   <img width="400px" src="https://raw.githubusercontent.com/L-Chris/vue-design/develop/docs/images/layout.png">
   <img width="400px" src="https://raw.githubusercontent.com/L-Chris/vue-design/develop/docs/images/code.png">
 </p>
+
+## ✨ Download
+
+- Windows：[百度网盘](https://pan.baidu.com/s/1fpfvKkFW4AndlI6Zvk3yrA)
+- Mac：
 
 ## 🔧 Build Setup
 

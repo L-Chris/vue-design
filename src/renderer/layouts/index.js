@@ -1,9 +1,7 @@
+import read from 'fs-readdir-recursive'
 import parser from '@/plugins/parser'
-const files = require.context('.', true, /\.(\/[^/]+){2}\.vue$/)
-const layouts = []
+const prefix = `${__static}/layouts`
 
-files.keys().forEach(key => {
-  layouts.push(parser(`${__dirname}/${key.replace('./', '')}`))
-})
+let layouts = read(prefix).map(key => parser(`${prefix}/${key}`))
 
 export default layouts
