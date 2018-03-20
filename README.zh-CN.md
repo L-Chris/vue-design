@@ -7,10 +7,11 @@
 <p align="center">用<strong>Vue</strong>和<strong>Electron</strong>开发最好的页面<strong>可视化</strong>构建程序</p>
 <p align="right"><em>Your star is the greatest encouragement to me.</em></p>
 
-## ✨ Features:
+## ✨ 功能:
 
 - 使用electron构建的桌面端应用
 - 通过可拖拽、可编辑的组件设计页面
+- 可编辑页面css
 - 保存为.vue文件
 - 保存/导入一个项目
 
@@ -18,6 +19,11 @@
   <img width="400px" src="https://raw.githubusercontent.com/L-Chris/vue-design/develop/docs/images/layout.png">
   <img width="400px" src="https://raw.githubusercontent.com/L-Chris/vue-design/develop/docs/images/code.png">
 </p>
+
+## ✨ 下载
+
+- Windows：[百度网盘](https://pan.baidu.com/s/1fpfvKkFW4AndlI6Zvk3yrA)
+- Mac：
 
 ## 🔧 开发步骤
 
