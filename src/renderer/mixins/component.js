@@ -13,13 +13,13 @@ export default {
         el: document.getElementById(id),
         render (h) {
           let component = that.components.find(_ => _.id === id)
-          if (!component) return
+          if (!component) return this.$destroy()
           let {setting: { tag }, props} = component
           return h(tag, {
             attrs: {id},
             props,
             domProps: props.domProps,
-            class: props.class.split(' '),
+            class: props.class && props.class.split(' '),
             style: props.style
           })
         }

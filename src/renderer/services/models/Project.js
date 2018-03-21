@@ -33,16 +33,18 @@ class Project {
 
   save ({name, path}, data, cb) {
     /* eslint-disable */
+    let template, styles, code
     const scripts = `<script>export default {}<\/script>`
-    const styles = `<style>.view {}</style>`
     const fullPath = `${path}/${name}`
     if (!fs.existsSync(fullPath)) {
       fs.mkdirSync(fullPath)
     }
     for (let page of data) {
       let {id, components} = page
-      let code = `<template>${stringifyTemplate(components)}</template>${scripts}${styles}`
-      code = pretty(code)
+      styles = components.find(_ => _.setting.label === 'style')
+      styles = `<style>${styles ? styles.props.domProps.innerText : ''}</style>`
+      template = `<template>${stringifyTemplate(components)}</template>`
+      code = pretty(`${template}${scripts}${styles}`)
       fs.writeFile(`${fullPath}/${id}.vue`, code, err => {
         if (err) console.log(err)
       })

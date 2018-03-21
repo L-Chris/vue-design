@@ -22,9 +22,9 @@
 
 <script>
 import SelectedMask from './SelectedMask'
-import throttle from 'lodash.throttle'
 import componentMixins from '@/mixins/component'
 import {mapState, mapGetters, mapActions} from 'vuex'
+import throttle from 'lodash.throttle'
 import {createElement, guid, recursiveFind} from '@/utils'
 import {SET_SELECTED_COMPONENT, SET_SELECTED_WIDGET, ADD_COMPONENT_SLOT} from '@/store/mutation-types'
 export default {
@@ -127,6 +127,9 @@ export default {
         }
       }
     }
+  },
+  activated () {
+    this.reRender()
   }
 }
 </script>

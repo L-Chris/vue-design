@@ -38,7 +38,7 @@ export default {
       return `<script>export default {}<\/script>`
     },
     styles () {
-      return `<style>${this.pageCss ? this.pageCss.props.domProps.innerText : ''}</style>`
+      return `<style lang="css" scoped>${this.pageCss ? this.pageCss.props.domProps.innerText : ''}</style>`
     }
   },
   activated () {
