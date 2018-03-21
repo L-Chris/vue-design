@@ -8,7 +8,7 @@
 import {codemirror} from 'vue-codemirror'
 import {mapGetters} from 'vuex'
 import {guid} from '@/utils'
-import {UPDATE_COMPONENT, ADD_COMPONENT_SLOT} from '@/store/mutation-types'
+import {UPDATE_COMPONENT, ADD_COMPONENT} from '@/store/mutation-types'
 export default {
   components: {
     codemirror
@@ -34,8 +34,6 @@ export default {
   },
   methods: {
     handleChange (innerText) {
-      if (!this.components.length) return
-      let {id} = this.components[0]
       let props = {
         domProps: { innerText: innerText.replace(/[\r\n]/g, '') }
       }
@@ -43,12 +41,13 @@ export default {
       if (this.pageCss) {
         this.$store.commit(UPDATE_COMPONENT, { id: this.pageCss.id, props })
       } else {
-        let slot = {
+        let component = {
           id: guid(),
+          parent: 'wrapper',
           setting: { tag: 'style', label: 'style' },
           props
         }
-        this.$store.commit(ADD_COMPONENT_SLOT, { id, slot })
+        this.$store.commit(ADD_COMPONENT, component)
       }
     },
     resetCss () {

@@ -45,7 +45,7 @@ export default path => {
   rootNode = null
   node = null
   stack = []
-  let label = path.replace(/.+\/|\.vue/g, '')
+  let label = path.replace(/.+[/\\]|\.vue/g, '')
   let data = fs.readFileSync(path)
   parser.write(data)
   parser.end()

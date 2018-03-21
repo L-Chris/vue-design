@@ -29,6 +29,14 @@
             single-line
           />
           <v-text-field
+            v-else-if="_.type==='Object'"
+            v-model="props[_.key]"
+            :placeholder="JSON.stringify(_.default)"
+            :required="_.required"
+            @change="handleChange"
+            single-line
+          />
+          <v-text-field
             v-else
             v-model="props[_.key]"
             :placeholder="_.default"

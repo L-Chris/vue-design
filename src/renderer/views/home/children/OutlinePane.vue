@@ -4,8 +4,6 @@
       ref="tree"
       :data="componentTree"
       @node-click="handleSelect"
-      @node-contextmenu="handleDelete"
-      :filter-node-method="filterNode"
       node-key="id"
       empty-text="No Data"
       highlight-current
@@ -16,14 +14,14 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import {spliceIf, recursiveMap, recursiveFind} from '@/utils'
+import {recursiveMap, recursiveFind} from '@/utils'
 import {SET_SELECTED_COMPONENT} from '@/store/mutation-types'
 export default {
   computed: {
     ...mapGetters(['components', 'selectedComponent']),
     componentTree () {
       return recursiveMap(
-        this.components,
+        this.components.filter(_ => _.setting.label !== 'style'),
         _ => ({
           id: _.id,
           label: _.setting.label
@@ -35,19 +33,10 @@ export default {
   watch: {
     selectedComponent (component) {
       component && this.$nextTick(() => this.setCurrentKey(component.id))
-    },
-    components: {
-      handler (val) {
-        val && this.$nextTick(() => this.$refs['tree'].filter())
-      },
-      deep: true
     }
   },
   methods: {
     ...mapActions(['deleteComponent']),
-    filterNode (val, data) {
-      return data.label !== 'style'
-    },
     handleSelect (e, {data}) {
       let component = recursiveFind(this.components, _ => _.id === data.id, 'props.slots')
       this.$store.commit(SET_SELECTED_COMPONENT, component)
@@ -56,9 +45,9 @@ export default {
     setCurrentKey (id = this.selectedComponent.id) {
       this.$refs['tree'].setCurrentKey(id)
     },
-    handleDelete (e, _, node) {
-      const children = node.parent.childNodes
-      spliceIf(children, c => c.id === node.id)
+    handleDelete (e, _) {
+      // const children = node.parent.childNodes
+      // spliceIf(children, c => c.id === node.id)
       this.deleteComponent(_)
     }
   }

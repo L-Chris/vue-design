@@ -37,11 +37,6 @@ function createWindow () {
     mainWindow.webContents.send('window:maximize')
   })
 
-  mainWindow.on('closed', () => {
-    mainWindow.webContents.send('window:closed')
-    mainWindow = null
-  })
-
   ipcMain.on('window:minimize', () => {
     mainWindow.minimize()
   })

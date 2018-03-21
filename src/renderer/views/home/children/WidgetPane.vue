@@ -26,6 +26,7 @@ export default {
     ...mapGetters(['componentLibrary']),
     filteredWidgets () {
       return this.widgets[this.componentLibrary.label].filter(_ => _.setting.label.toLowerCase().includes(this.name))
+        .concat(this.widgets.native)
     }
   },
   methods: {
