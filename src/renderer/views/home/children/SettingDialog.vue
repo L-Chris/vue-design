@@ -19,7 +19,7 @@
               </v-btn>
             </v-flex>
             <v-flex xs11>
-              <v-select v-model="projectInfo.componentLibrary" :items="componentLibrarys" item-text="label" label="Component Library"/>
+              <v-select v-model="projectInfo.componentLibrary" :items="componentLibrarys" item-text="label" label="Component Library" append-icon="iconfont icon-arrow_down"/>
             </v-flex>
           </v-layout>          
         </v-form>

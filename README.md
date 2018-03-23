@@ -22,7 +22,7 @@
 
 ## ✨ Download
 
-- Windows：[百度网盘](https://pan.baidu.com/s/1fpfvKkFW4AndlI6Zvk3yrA)
+- Windows：[百度网盘](https://pan.baidu.com/s/1_ErSTfBIwZS0GcUFG6JGaQ)
 - Mac：
 
 ## 🔧 Build Setup

@@ -2,7 +2,7 @@
   <v-app class="home" @contextmenu.native.prevent="()=>{}" tabindex="0" @keydown.native.prevent.ctrl.83="handleSave">
     <v-navigation-drawer app fixed clipped permanent width="240">
       <v-expansion-panel expand>
-        <v-expansion-panel-content :value="true">
+        <v-expansion-panel-content :value="true" expand-icon="iconfont icon-arrow_down">
           <div slot="header">
             <v-flex d-flex justify-space-between align-center>
               <span class="body-2">Sitemap</span>
@@ -11,7 +11,7 @@
           </div>
           <SitemapPane/>
         </v-expansion-panel-content>
-        <v-expansion-panel-content :value="true">
+        <v-expansion-panel-content :value="true" expand-icon="iconfont icon-arrow_down">
           <div slot="header">
             <v-flex d-flex justify-space-between align-center>
               <span class="body-2">Layouts</span>
@@ -20,7 +20,7 @@
           </div>
           <LayoutPane/>
         </v-expansion-panel-content>
-        <v-expansion-panel-content :value="false">
+        <v-expansion-panel-content :value="false" expand-icon="iconfont icon-arrow_down">
           <div slot="header">
             <v-flex d-flex justify-space-between align-center>
               <span class="body-2">Blocks</span>
@@ -29,7 +29,7 @@
           </div>
           <BlockPane/>
         </v-expansion-panel-content>
-        <v-expansion-panel-content :value="true">
+        <v-expansion-panel-content :value="true" expand-icon="iconfont icon-arrow_down">
           <div slot="header">
             <v-flex d-flex justify-space-between align-center>
               <span class="body-2">Widgets</span>
@@ -42,11 +42,11 @@
     </v-navigation-drawer>
     <v-navigation-drawer app fixed right clipped permanent width="360">
       <v-expansion-panel expand>
-        <v-expansion-panel-content :value="true">
+        <v-expansion-panel-content :value="true" expand-icon="iconfont icon-arrow_down">
           <div slot="header" class="body-2">Inspector</div>
           <InspectorPane/>
         </v-expansion-panel-content>
-        <v-expansion-panel-content :value="true">
+        <v-expansion-panel-content :value="true" expand-icon="iconfont icon-arrow_down">
           <div slot="header" class="body-2">Outline</div>
           <OutlinePane/>
         </v-expansion-panel-content>
@@ -69,7 +69,7 @@
     <v-content class="home-main">
       <v-container fill-height>
         <v-toolbar class="home-main-bar" dense flat>
-          <v-toolbar-side-icon></v-toolbar-side-icon>
+          <i class="iconfont icon-menu"/>
           <v-toolbar-title>{{activeView.label}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-tooltip v-for="_ in views" :key="_.id"  bottom>
@@ -99,15 +99,7 @@
 import {ipcRenderer} from 'electron'
 import TuTitleBar from '@/components/TuTitleBar'
 import TuIconButton from '@/components/TuIconButton'
-import WireframePane from './children/WireframePane'
-import CodePane from './children/CodePane'
-import StylePane from './children/StylePane'
-import SitemapPane from './children/SitemapPane'
-import LayoutPane from './children/LayoutPane'
-import BlockPane from './children/BlockPane'
-import WidgetPane from './children/WidgetPane'
-import InspectorPane from './children/InspectorPane'
-import OutlinePane from './children/OutlinePane'
+import panes from './panes'
 import SettingDialog from './children/SettingDialog'
 import componentMixins from '@/mixins/component'
 import {Project} from '@/services'
@@ -116,17 +108,9 @@ export default {
   mixins: [componentMixins],
   components: {
     TuTitleBar,
-    SettingDialog,
     TuIconButton,
-    WireframePane,
-    CodePane,
-    StylePane,
-    SitemapPane,
-    LayoutPane,
-    BlockPane,
-    WidgetPane,
-    InspectorPane,
-    OutlinePane
+    SettingDialog,
+    ...panes
   },
   data () {
     return {
@@ -230,6 +214,10 @@ export default {
 
 <style lang="scss">
 .home {
+  .icon-arrow_down {
+    font-size: 12px;
+    margin-left: 4px;
+  }
   &-head {
     .toolbar__content {
       flex-direction: column;

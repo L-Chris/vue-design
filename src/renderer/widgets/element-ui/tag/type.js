@@ -43,7 +43,7 @@ const setting = Object.freeze({
         key: 'color',
         label: 'color',
         type: 'String',
-        inputType: 'input',
+        inputType: 'color',
         default: ''
       },
       {

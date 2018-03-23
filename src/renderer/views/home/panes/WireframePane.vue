@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import SelectedMask from './SelectedMask'
+import SelectedMask from '../children/SelectedMask'
 import componentMixins from '@/mixins/component'
 import {mapState, mapGetters, mapActions} from 'vuex'
 import throttle from 'lodash.throttle'

@@ -64,21 +64,20 @@ const map = (collection, iteratee, parseChildren, output = [], stack = []) => {
   return output
 }
 
+const parse = path => path.includes('.') ? parsePath(path) : _ => _[path]
+
 // 递归map
 export function recursiveMap (collection, iteratee, path) {
-  const parseChildren = path.includes('.') ? parsePath(path) : _ => _[path]
-  return map(collection, iteratee, parseChildren)
+  return map(collection, iteratee, parse(path))
 }
 
 // 递归查询
 export function recursiveFind (collection, predicate, path) {
-  const parseChildren = path.includes('.') ? parsePath(path) : _ => _[path]
-  return recursive(collection, predicate, identity, parseChildren)
+  return recursive(collection, predicate, identity, parse(path))
 }
 // 递归删除
 export function recursiveSpliceBy (collection, predicate, path) {
-  const parseChildren = path.includes('.') ? parsePath(path) : _ => _[path]
-  return recursive(collection, predicate, (_, i, arr) => arr.splice(i, 1), parseChildren)
+  return recursive(collection, predicate, (_, i, arr) => arr.splice(i, 1), parse(path))
 }
 
 // 创建挂载点

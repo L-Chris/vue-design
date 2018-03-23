@@ -85,8 +85,7 @@ export function wrapComponent ({tag, originTag, config: {Props}}) {
       return h(
         originTag,
         {
-          props: toProps(Props).call(this),
-          style: this.style
+          props: toProps(Props).call(this)
         },
         this.slots.map(_ => h(_.setting.tag, {
           slot: _.slot,
@@ -114,8 +113,7 @@ export function stringifyAttributes ({props, config}) {
 
 // 组件转换为模板字符串
 export function stringifyTemplate (components) {
-  return components.reduce((pre, {props: { slots, ...props }, setting: { label, config }}) => {
-    if (label === 'style') return pre
+  return components.filter(_ => _.setting.label !== 'style').reduce((pre, {props: { slots, ...props }, setting: { label, config }}) => {
     return `${pre}<${label} ${stringifyAttributes({props, config})}>${slots.length ? stringifyTemplate(slots) : ''}</${label}>`
   }, '')
 }

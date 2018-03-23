@@ -44,14 +44,14 @@ const setting = Object.freeze({
         key: 'void-color',
         label: 'void-color',
         type: 'String',
-        inputType: 'input',
+        inputType: 'color',
         default: '#C6D1DE'
       },
       {
         key: 'disabled-void-color',
         label: 'disabled-void-color',
         type: 'String',
-        inputType: 'input',
+        inputType: 'color',
         default: '#EFF2F7'
       },
       {
@@ -86,7 +86,7 @@ const setting = Object.freeze({
         key: 'text-color',
         label: 'text-color',
         type: 'String',
-        inputType: 'input',
+        inputType: 'color',
         default: '#1F2D3D'
       },
       {
