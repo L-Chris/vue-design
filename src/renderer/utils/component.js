@@ -86,15 +86,7 @@ export function wrapComponent ({tag, originTag, config: {Props}}) {
         originTag,
         {
           props: toProps(Props).call(this)
-        },
-        this.slots.map(_ => h(_.setting.tag, {
-          slot: _.slot,
-          attrs: { id: _.id },
-          props: _.props,
-          domProps: _.props.domProps,
-          class: _.props.class && _.props.class.split(' '),
-          style: _.props.style
-        }))
+        }
       )
     }
   }

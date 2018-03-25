@@ -1,7 +1,7 @@
 import {createProps, wrapComponent} from '@/utils/component'
 
-export default setting => ({
+export default (setting, component) => ({
   createProps: createProps(setting.config.Props),
   setting,
-  component: wrapComponent(setting)
+  component: component || wrapComponent(setting)
 })

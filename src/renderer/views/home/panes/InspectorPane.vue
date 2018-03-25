@@ -30,7 +30,6 @@
 import TypeBoxes from '@/components/TypeBox'
 import {mapGetters} from 'vuex'
 import {createProps} from '@/utils/component'
-import {UPDATE_COMPONENT} from '@/store/mutation-types'
 export default {
   components: {
     ...TypeBoxes
@@ -48,8 +47,9 @@ export default {
       if (!val) return
       this.props = createProps(this.parsePath('setting.config.Props')(val))(this.selectedComponent.props)
     },
-    props (val) {
-      this.updateComponentProps()
+    props: {
+      handler (val) { this.updateComponentProps() },
+      deep: true
     }
   },
   methods: {
@@ -62,7 +62,7 @@ export default {
       return `${str[0].toUpperCase()}${str.slice(1)}`
     },
     updateComponentProps () {
-      this.$store.commit(UPDATE_COMPONENT, {
+      this.$store.dispatch('updateComponent', {
         id: this.selectedComponent.id,
         props: this.props
       })

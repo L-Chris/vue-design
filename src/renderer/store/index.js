@@ -24,7 +24,18 @@ let store = new Vuex.Store({
     selectedPage: null,
     selectedLayout: null,
     selectedBlock: null,
-    selectedWidget: null
+    selectedWidget: null,
+    contextMenu: {
+      visible: false,
+      x: 0,
+      y: 0
+    },
+    slotMenu: {
+      slots: [],
+      visible: false,
+      x: 0,
+      y: 0
+    }
   },
   getters: {
     componentLibrary (state) {
@@ -33,11 +44,17 @@ let store = new Vuex.Store({
     pageId (state) {
       return state.route.query.id
     },
+    instances (state, {pageId}) {
+      return state[pageId] ? state[pageId].instances : new Map()
+    },
     components (state, {pageId}) {
       return state[pageId] ? state[pageId].components : []
     },
     selectedComponent (state, {pageId}) {
       return state[pageId] ? state[pageId].selectedComponent : null
+    },
+    hoveredComponent (state, {pageId}) {
+      return state[pageId] ? state[pageId].hoveredComponent : null
     },
     pageCss (state, {components}) {
       return components.find(_ => _.setting.label === 'style')
@@ -63,6 +80,9 @@ let store = new Vuex.Store({
     [types.ADD_COMPONENT] (state, component) {
       state[state.selectedPage.id].components.push(component)
     },
+    [types.ADD_INSTANCE] (state, instance) {
+      state[state.selectedPage.id].instances.set(instance._uid, instance)
+    },
     [types.DEL_COMPONENT] (state, {id}) {
       let {id: pageId} = state.selectedPage
       recursiveSpliceBy(state[pageId].components, _ => _.id === id, 'props.slots')
@@ -86,6 +106,10 @@ let store = new Vuex.Store({
       let pageState = state[state.selectedPage.id]
       pageState.selectedComponent = component
     },
+    [types.SET_HOVERED_COMPONENT] (state, component) {
+      let pageState = state[state.selectedPage.id]
+      pageState.hoveredComponent = component
+    },
     [types.SET_SELECTED_BLOCK] (state, block) {
       state.selectedBlock = block
     },
@@ -98,6 +122,12 @@ let store = new Vuex.Store({
     },
     [types.SET_SELECTED_LAYOUT] (state, layout) {
       state.selectedLayout = layout
+    },
+    [types.SET_CONTEXT_MENU] (state, menu) {
+      Object.assign(state.contextMenu, menu)
+    },
+    [types.SET_SLOT_MENU] (state, menu) {
+      Object.assign(state.slotMenu, menu)
     }
   },
   actions: {
@@ -138,12 +168,21 @@ let store = new Vuex.Store({
       commit(types.SET_SELECTED_PAGE, page)
       return page
     },
+    updateComponent ({commit, getters}, {id, props}) {
+      commit(types.UPDATE_COMPONENT, {id, props})
+      Object.assign(getters.instances.get(id), props)
+    },
     addComponent ({commit}, component) {
       commit(types.ADD_COMPONENT, component)
       commit(types.SET_SELECTED_COMPONENT, component)
     },
-    deleteComponent ({commit}, component) {
+    deleteComponent ({commit, getters}, component = getters.selectedComponent) {
+      const {id} = component
+      const {instances} = getters
       commit(types.DEL_COMPONENT, component)
+      console.log(instances.get(id).$destroy)
+      instances.get(id).$destroy()
+      instances.delete(id)
       commit(types.SET_SELECTED_COMPONENT, null)
     }
   }
