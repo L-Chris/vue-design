@@ -180,7 +180,6 @@ let store = new Vuex.Store({
       const {id} = component
       const {instances} = getters
       commit(types.DEL_COMPONENT, component)
-      console.log(instances.get(id).$destroy)
       instances.get(id).$destroy()
       instances.delete(id)
       commit(types.SET_SELECTED_COMPONENT, null)

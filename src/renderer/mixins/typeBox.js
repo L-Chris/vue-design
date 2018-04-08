@@ -13,6 +13,11 @@ export default {
   watch: {
     value (val) {
       this.$emit('update:field', val)
+    },
+    field (val) {
+      if (val !== this.value) {
+        this.value = this.field
+      }
     }
   },
   created () {

@@ -11,7 +11,7 @@
 <script>
 import {mapState, mapGetters} from 'vuex'
 import {mountSlot} from '@/utils/mount'
-import {SET_SLOT_MENU, ADD_COMPONENT_SLOT, SET_SELECTED_WIDGET} from '@/store/mutation-types'
+import {SET_SLOT_MENU, ADD_INSTANCE, ADD_COMPONENT_SLOT, SET_SELECTED_WIDGET} from '@/store/mutation-types'
 export default {
   computed: {
     ...mapState(['slotMenu', 'selectedWidget']),
@@ -24,11 +24,13 @@ export default {
       let props = createProps()
       return {id, parent, slot, props, setting}
     },
-    handleDrop (name) {
+    async handleDrop (name) {
       let {id} = this.selectedComponent
       let parentVm = this.instances.get(id)
-      const vm = mountSlot(parentVm, this.selectedWidget.component, this.$store, name)
+      const vm = await mountSlot(parentVm, this.selectedWidget.component, this.$store, name)
       let component = this.createComponentInfo(vm._uid, id, name)
+      vm.$info = component
+      this.$store.commit(ADD_INSTANCE, vm)
       this.$store.commit(ADD_COMPONENT_SLOT, {id, slot: component})
       this.$store.commit(SET_SELECTED_WIDGET, null)
       this.$store.commit(SET_SLOT_MENU, {

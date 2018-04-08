@@ -19,7 +19,7 @@
           <v-subheader>{{_.label}}</v-subheader>
         </v-flex>
         <v-flex class="inspector-field" xs6>
-          <component :is="`TypeBox${toTypeBoxName(_.inputType,_.type)}`" :key="_.key" :field.sync="props[_.key]" :config="_"/>
+          <component :is="`TypeBox${toTypeBoxName(_.inputType,_.type)}`" :field.sync="props[_.key]" :config="_"/>
         </v-flex>
       </v-layout>
     </template>

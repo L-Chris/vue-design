@@ -1,15 +1,18 @@
 
-import {toPropsModel} from '@/utils/component'
+import {toPropsModel, toProps} from '@/utils/component'
 import setting from './type'
 
 export default {
   name: setting.originTag,
   props: toPropsModel(setting.config.Props),
   render () {
+    const props = toProps(setting.config.Props).call(this)
     return (
-      <el-button
-        size={this.size}
-      >{this.text}</el-button>
+      <setting.originTag
+        {...{props}}
+      >
+        {this.$slots.default}
+      </setting.originTag>
     )
   }
 }

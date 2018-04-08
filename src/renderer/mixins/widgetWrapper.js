@@ -38,5 +38,8 @@ export default {
   mounted () {
     this.$el.id = this._uid
     this.registerEvents()
+  },
+  destroyed () {
+    this.$el.parentNode.removeChild(this.$el)
   }
 }
