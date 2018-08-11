@@ -104,6 +104,7 @@ import SettingDialog from './children/SettingDialog'
 import componentMixins from '@/mixins/component'
 import {Project} from '@/services'
 import {mapState, mapActions} from 'vuex'
+import {views} from '@/utils/const'
 export default {
   mixins: [componentMixins],
   components: {
@@ -114,11 +115,7 @@ export default {
   },
   data () {
     return {
-      views: [
-        { id: 0, label: 'View', value: 'WireframePane', icon: 'layout', tip: 'edit view' },
-        { id: 1, label: 'Css', value: 'StylePane', icon: 'css', tip: 'edit css' },
-        { id: 2, label: 'Source', value: 'CodePane', icon: 'code', tip: 'view source' }
-      ],
+      views,
       activeIndex: 0,
       settingDialogVisible: false,
       status: 0
@@ -173,7 +170,7 @@ export default {
       this.settingDialogVisible = true
       this.status = 1
     },
-    // if not set projectInfo, set first (use generator function)
+    // if not set projectInfo, set first
     handleSave () {
       if (!this.project.name || !this.project.path) {
         this.settingDialogVisible = true

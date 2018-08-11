@@ -41,13 +41,12 @@ export default {
       if (this.pageCss) {
         this.$store.commit(UPDATE_COMPONENT, { id: this.pageCss.id, props })
       } else {
-        let component = {
+        this.$store.commit(ADD_COMPONENT, {
           id: guid(),
           parent: 'wrapper',
           setting: { tag: 'style', label: 'style' },
           props
-        }
-        this.$store.commit(ADD_COMPONENT, component)
+        })
       }
     },
     resetCss () {

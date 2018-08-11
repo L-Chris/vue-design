@@ -26,14 +26,15 @@ export default {
         y
       })
     }, 150),
-    handleDragLeave (e) {
-    },
+    handleDragLeave (e) {},
     registerEvents () {
       this.$el.addEventListener('mousedown', this.handleMouseDown)
       this.$el.addEventListener('mouseover', this.handleMouseOver)
       this.$el.addEventListener('dragover', this.handleDragOver)
       this.$el.addEventListener('dragleave', this.handleDragLeave)
     }
+  },
+  updated () {
   },
   mounted () {
     this.$el.id = this._uid
